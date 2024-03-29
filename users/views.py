@@ -3,7 +3,12 @@ from django.shortcuts import render
 from rest_framework import generics
 from rest_framework import permissions,status
 from rest_framework.response import Response
-from .models import CustomUser,StudentProfile
+from .models import (CustomUser,
+                     StudentProfile,
+                     UniversitySupervisorProfile,
+                     CompanyProfile,
+                     CompanySupervisorProfile,
+                     )
 from .serializers import (UserSerializer,
                           UserGETSerializer ,
                           StdProfileGETSerializer,
@@ -32,11 +37,6 @@ class RetrieveUserView(generics.GenericAPIView):
 
         return Response(user.data, status=status.HTTP_200_OK)
     
-# class PrrofieListCreateAPIView(generics.CreateAPIView):
-#     queryset = CustomUser.objects.all()
-#     serializer_class = UserSerializer
-#     permission_classes = [AllowAny]
-
 
 
 class RetrieveStudentProfileView(generics.RetrieveAPIView):
@@ -45,17 +45,17 @@ class RetrieveStudentProfileView(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
 
 
-class RetrieveUniSuperProfileView(generics.RetrieveAPIView):
-    queryset = StudentProfile.objects.all()
+class RetrieveUniversitySupervisorProfileView(generics.RetrieveAPIView):
+    queryset = UniversitySupervisorProfile.objects.all()
     serializer_class =UniSuperGETSerializer
     permission_classes = [AllowAny]
 
 class RetrieveCompanyProfileView(generics.RetrieveAPIView):
-    queryset = StudentProfile.objects.all()
+    queryset = CompanyProfile.objects.all()
     serializer_class =CompanyGETSerializer
     permission_classes = [AllowAny]
 
-class RetrieveCompanySuperProfileView(generics.RetrieveAPIView):
-    queryset = StudentProfile.objects.all()
+class RetrieveCompanySupervisorProfileView(generics.RetrieveAPIView):
+    queryset = CompanySupervisorProfile.objects.all()
     serializer_class =CompanySuperGETSerializer
     permission_classes = [AllowAny]

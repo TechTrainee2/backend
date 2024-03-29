@@ -51,27 +51,30 @@ class UserGETSerializer(serializers.ModelSerializer):
 class StdProfileGETSerializer(serializers.ModelSerializer):
     img = serializers.ImageField(required=False) 
     img_bk = serializers.ImageField(required=False)
+    cv = serializers.FileField(required=False)
     class Meta:
         model =StudentProfile
-        fields =['img']
+        fields =['img','img_bk','cv']
 
 class UniSuperGETSerializer(serializers.ModelSerializer):
     img = serializers.ImageField(required=False) 
     img_bk = serializers.ImageField(required=False)
     class Meta:
         model =UniversitySupervisorProfile
-        fields =['img']
+        fields =['img','img_bk']
 
 class CompanyGETSerializer(serializers.ModelSerializer):
     img = serializers.ImageField(required=False) 
     img_bk = serializers.ImageField(required=False)
     class Meta:
         model =CompanyProfile
-        fields =['img']
+        fields =['img','img_bk']
+
+   
 
 class CompanySuperGETSerializer(serializers.ModelSerializer):
     img = serializers.ImageField(required=False) 
     img_bk = serializers.ImageField(required=False)
     class Meta:
         model =CompanySupervisorProfile
-        fields =['img']
+        fields =['img','img_bk']

@@ -68,13 +68,17 @@ class StudentProfile(models.Model):
     DEPARTMENTS = (
         ("computer_science","Computer Science"),
     )
+    
     user = models.OneToOneField(CustomUser,on_delete=models.CASCADE,related_name="student",primary_key=True)
     location = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
     department = models.CharField(max_length=50,choices=DEPARTMENTS, null=True,blank=True)
     phone = models.CharField(blank=True,null=True,max_length=50)
-    cv = models.FileField(upload_to="files",null=True,blank=True)
-    img= models.ImageField(upload_to="files",null=True,blank=True)
-    img_bk=models.ImageField(upload_to="files",null=True,blank=True)
+    cv = models.FileField(upload_to="files\\cvs",null=True,blank=True)
+    img= models.ImageField(upload_to="files\\images",null=True,blank=True)
+    img_bk=models.ImageField(upload_to="files\\images",null=True,blank=True)
+    first_name = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
+    last_name = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
+    
     # put forign key of ids that exsit 
     # img_id=models.CharField(blank=True,null=True,max_length=50)
 
@@ -88,12 +92,14 @@ class UniversitySupervisorProfile(models.Model):
     DEPARTMENTS = (
         ("computer_science","Computer Science"),
     )
-    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name="University_Supervisor")
+    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name="University_Supervisor",primary_key=True)
     location = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
     department = models.CharField(max_length=50,choices=DEPARTMENTS, null=True,blank=True)
     phone = models.CharField(blank=True,null=True,max_length=50)
-    img= models.ImageField(upload_to="files",null=True,blank=True)
-    img_bk=models.ImageField(upload_to="files",null=True,blank=True)
+    img= models.ImageField(upload_to="files\\images",null=True,blank=True)
+    img_bk=models.ImageField(upload_to="files\\images",null=True,blank=True)
+    first_name = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
+    last_name = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
 
 class CompanyProfile(models.Model):
     LOCATIONS = (
@@ -102,12 +108,14 @@ class CompanyProfile(models.Model):
         ('zarqa', 'Zarqa')
     )
     
-    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name="Company")
+    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name="Company",primary_key=True)
     location = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
     phone = models.CharField(blank=True,null=True,max_length=50)
     comp_id=models.CharField(blank=True,null=True,max_length=50)
-    img= models.ImageField(upload_to="files",null=True,blank=True)
-    img_bk=models.ImageField(upload_to="files",null=True,blank=True)
+    img= models.ImageField(upload_to="files\\images",null=True,blank=True)
+    img_bk=models.ImageField(upload_to="files\\images",null=True,blank=True)
+    name = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
+
 
 class CompanySupervisorProfile(models.Model):
     LOCATIONS = (
@@ -116,13 +124,14 @@ class CompanySupervisorProfile(models.Model):
         ('zarqa', 'Zarqa')
     )
     
-    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name="Company_supervisor")
+    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name="Company_supervisor",primary_key=True)
     location = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
     phone = models.CharField(blank=True,null=True,max_length=50)
     role=models.CharField(blank=True,null=True,max_length=50)
-    img= models.ImageField(upload_to="files",null=True,blank=True)
-    img_bk=models.ImageField(upload_to="files",null=True,blank=True)
-
+    img= models.ImageField(upload_to="files\\images",null=True,blank=True)
+    img_bk=models.ImageField(upload_to="files\\images",null=True,blank=True)
+    first_name = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
+    last_name = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
 
 
 
