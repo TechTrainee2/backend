@@ -44,9 +44,13 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserGETSerializer(serializers.ModelSerializer):
+
   class Meta:
     model =CustomUser
-    fields = ['email','account_type']
+    fields = ["id",'email','account_type']
+    read_only_fields = ["id"]
+
+    
 
 class StdProfileGETSerializer(serializers.ModelSerializer):
     img = serializers.ImageField(required=False) 
