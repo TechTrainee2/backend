@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager, PermissionsMixin,AbstractBaseUser
     
 class UserAccountManager(BaseUserManager):
-  def create_user(self, email, account_type,password=None):
+  def create_user(self, email,password=None,**other_fields):
     if not email:
       raise ValueError('Users must have an email address')
 
@@ -12,7 +12,8 @@ class UserAccountManager(BaseUserManager):
     user = self.model(
  
       email=email,
-      account_type= account_type
+    #   account_type= self.account_type,
+      **other_fields
     )
 
     user.set_password(password)
@@ -20,10 +21,11 @@ class UserAccountManager(BaseUserManager):
 
     return user
   
-  def create_superuser(self, email, password=None):
+  def create_superuser(self, email, password=None ,**other_fields):
     user = self.create_user(
       email,
       password=password,
+      **other_fields
     )
 
     user.is_staff = True
@@ -43,7 +45,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         ('REGISTRATION', 'Registration'),
         ("ADMIN","Admin"),
     )
-    account_type = models.CharField(max_length=50, choices=ACCOUNT_TYPE_CHOICES)
+    account_type = models.CharField(max_length=50, choices=ACCOUNT_TYPE_CHOICES, default="ADMIN")
   
     email = models.EmailField(unique=True, max_length=255)
     is_active = models.BooleanField(default=True)
