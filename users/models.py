@@ -78,9 +78,10 @@ class StudentProfile(models.Model):
     cv = models.FileField(upload_to="files\\cvs",null=True,blank=True)
     img= models.ImageField(upload_to="files\\images",null=True,blank=True)
     img_bk=models.ImageField(upload_to="files\\images",null=True,blank=True)
-    first_name = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
-    last_name = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
-    
+    first_name = models.CharField(max_length=50,null=True,blank=True)
+    last_name = models.CharField(max_length=50,null=True,blank=True)
+    bio = models.TextField(max_length=255,null=True,blank=True)
+
     # put forign key of ids that exsit 
     # img_id=models.CharField(blank=True,null=True,max_length=50)
 
@@ -100,8 +101,8 @@ class UniversitySupervisorProfile(models.Model):
     phone = models.CharField(blank=True,null=True,max_length=50)
     img= models.ImageField(upload_to="files\\images",null=True,blank=True)
     img_bk=models.ImageField(upload_to="files\\images",null=True,blank=True)
-    first_name = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
-    last_name = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
+    first_name = models.CharField(max_length=50,null=True,blank=True)
+    last_name = models.CharField(max_length=50,null=True,blank=True)
 
 class CompanyProfile(models.Model):
     LOCATIONS = (
@@ -116,7 +117,9 @@ class CompanyProfile(models.Model):
     comp_id=models.CharField(blank=True,null=True,max_length=50)
     img= models.ImageField(upload_to="files\\images",null=True,blank=True)
     img_bk=models.ImageField(upload_to="files\\images",null=True,blank=True)
-    name = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
+    name = models.CharField(max_length=50,null=True,blank=True)
+    bio=models.CharField(max_length=50,null=True,blank=True)
+    
 
 
 class CompanySupervisorProfile(models.Model):
@@ -132,8 +135,8 @@ class CompanySupervisorProfile(models.Model):
     role=models.CharField(blank=True,null=True,max_length=50)
     img= models.ImageField(upload_to="files\\images",null=True,blank=True)
     img_bk=models.ImageField(upload_to="files\\images",null=True,blank=True)
-    first_name = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
-    last_name = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
+    first_name = models.CharField(max_length=50,null=True,blank=True)
+    last_name = models.CharField(max_length=50,null=True,blank=True)
 
 
 

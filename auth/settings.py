@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-qz0%d43^qdmf1#+lvzfi8pzvg%xa2jc6vi6blg4$zsw5-_v20@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*","localhost:5000"]
+ALLOWED_HOSTS = ["*","localhost:5000","localhost:3000"]
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5000",  
     "http://localhost:3000",  
@@ -58,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'auth.urls'
@@ -146,7 +147,8 @@ REST_FRAMEWORK = {
     ]
 }
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
 }
 # MEDIA_URL='/media/'
 # MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+# X_FRAME_OPTIONS = 'ALLOWALL'

@@ -49,16 +49,15 @@ class UserGETSerializer(serializers.ModelSerializer):
     model =CustomUser
     fields = ["id",'email','account_type']
     read_only_fields = ["id"]
-
-    
-
+        
 class StdProfileGETSerializer(serializers.ModelSerializer):
     img = serializers.ImageField(required=False) 
     img_bk = serializers.ImageField(required=False)
     cv = serializers.FileField(required=False)
+    user = UserGETSerializer()
     class Meta:
         model =StudentProfile
-        fields =['img','img_bk','cv']
+        fields ="__all__"
 
 class UniSuperGETSerializer(serializers.ModelSerializer):
     img = serializers.ImageField(required=False) 
