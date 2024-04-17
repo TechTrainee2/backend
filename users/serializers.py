@@ -62,22 +62,25 @@ class StdProfileGETSerializer(serializers.ModelSerializer):
 class UniSuperGETSerializer(serializers.ModelSerializer):
     img = serializers.ImageField(required=False) 
     img_bk = serializers.ImageField(required=False)
+    user = UserGETSerializer()
     class Meta:
         model =UniversitySupervisorProfile
-        fields =['img','img_bk']
+        fields ="__all__"
 
 class CompanyGETSerializer(serializers.ModelSerializer):
     img = serializers.ImageField(required=False) 
     img_bk = serializers.ImageField(required=False)
+    user = UserGETSerializer()
     class Meta:
         model =CompanyProfile
-        fields =['img','img_bk']
+        fields ="__all__"
 
    
 
 class CompanySuperGETSerializer(serializers.ModelSerializer):
     img = serializers.ImageField(required=False) 
     img_bk = serializers.ImageField(required=False)
+    user = UserGETSerializer()
     class Meta:
         model =CompanySupervisorProfile
-        fields =['img','img_bk']
+        fields ="__all__"
