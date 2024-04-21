@@ -1,22 +1,38 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import (CustomUser,
-                     StudentProfile,
-                     UniversitySupervisorProfile,
-                     CompanySupervisorProfile,
-                     CompanyProfile)
+from .models import (
+                    Student,
+                    StudentProfile, 
+                    UniversitySupervisor, 
+                    UniversitySupervisorProfile, 
+                    Company, 
+                    CompanyProfile, 
+                    CompanySupervisor, 
+                    CompanySupervisorProfile,
+                    CustomUser,
+                    )
+
 
 @receiver(post_save, sender=CustomUser)
-def create_profile(sender, instance, created, **kwargs):
-    if created:
-        if instance.account_type=="STUDENT":
-            StudentProfile.objects.create(user=instance)
+def create_company_and_profile(sender, instance, created, **kwargs):
+    if created and instance.account_type == "COMPANY":
+        company, created = Company.objects.get_or_create(user=instance)
+        CompanyProfile.objects.get_or_create(company=company)
 
-        elif instance.account_type == "UNIVERSITY_SUPERVISOR":
-            UniversitySupervisorProfile.objects.create(user=instance)
+@receiver(post_save, sender=CustomUser)
+def create_companySupervisor_and_profile(sender, instance, created, **kwargs):
+    if created and instance.account_type == "COMPANY_SUPERVISOR":
+        company_supervisor, created = CompanySupervisor.objects.get_or_create(user=instance)
+        CompanySupervisorProfile.objects.get_or_create(company_supervisor=company_supervisor)
 
-        elif instance.account_type == "COMPANY":
-            CompanyProfile.objects.create(user=instance)
+@receiver(post_save, sender=CustomUser)
+def create_student_and_profile(sender, instance, created, **kwargs):
+    if created and instance.account_type == "STUDENT":
+        student, created = Student.objects.get_or_create(user=instance)
+        StudentProfile.objects.get_or_create(student=student)
 
-        elif instance.account_type == "COMPANY_SUPERVISOR":
-            CompanySupervisorProfile.objects.create(user=instance)
+@receiver(post_save, sender=CustomUser)
+def create_universitySupervisor_and_profile(sender, instance, created, **kwargs):
+    if created and instance.account_type == "UNIVERSITY_SUPERVISOR":
+        university_supervisor, created = UniversitySupervisor.objects.get_or_create(user=instance)
+        UniversitySupervisorProfile.objects.get_or_create(university_supervisor=university_supervisor)

@@ -3,12 +3,34 @@ from . import views
 
 urlpatterns = [
     
-    path('customUser', views.CustomUserListCreateAPIView.as_view(), name='student-list-create'),
+    path('customUser', views.CustomUserListCreateAPIView.as_view(), name='student-list-create'),  #s7
     path('me',views.RetrieveUserView.as_view()),
+# 
     path('stdprof/<int:pk>',views.RetrieveStudentProfileView.as_view()),
     path('uniprof/<int:pk>',views.RetrieveUniversitySupervisorProfileView.as_view()),
     path('companyprof/<int:pk>',views.RetrieveCompanyProfileView.as_view()),
-    path('companySuperprof/<int:pk>',views.RetrieveCompanySupervisorProfileView.as_view()),
+    path('companysuperprof/<int:pk>',views.RetrieveCompanySupervisorProfileView.as_view()),
+    
+    path('user/universitySupervisorProfiles', views.UniversitySupervisorProfileList.as_view(), name='university-supervisor-profile-list'),
+    path('user/universitySupervisorProfile/<int:pk>', views.UniversitySupervisorProfileDetail.as_view(), name='university-supervisor-profile-detail'),
+    
+    path('user/studentProfiles', views.StudentList.as_view(), name='student-list'),
+    path('user/studentProfile/<int:pk>', views.StudentDetail.as_view(), name='student-detail'),
+    path('user/departments', views.DepartmentList.as_view(), name='department-list'),
+    path('user/company', views.CompanyList.as_view(), name='company-list'),
+    path('user/company/<int:pk>', views.CompanyDetail.as_view(), name='company-detail'),
+    path('user/companySupervisors', views.CompanySupervisorList.as_view(), name='company-supervisor-list'),
+    path('user/companySupervisor/<int:pk>', views.CompanySupervisorDetail.as_view(), name='company-supervisor-detail'),
+    path('user/universitySupervisors', views.UniversitySupervisorList.as_view(), name='university-supervisor-list'),
+    path('user/universitySupervisor/<int:pk>', views.UniversitySupervisorDetail.as_view(), name='university-supervisor-detail'),
+    path('user/users', views.CustomUserList.as_view(), name='custom-user-list'),
+    path('user/user/<int:pk>', views.CustomUserDetail.as_view(), name='custom-user-detail'),
+
+    path('company/posts', views.PostList.as_view(), name='post-list'),
+    path('company/post/<int:pk>', views.PostDetail.as_view(), name='post-detail'),
+
+     path('company/trainingApplication', views.TrainingApplicationCreate.as_view(), name='training-application-create'),
+    path('company/trainingApplication/<int:pk>', views.TrainingApplicationUpdate.as_view(), name='training-application-update'),
 
 
 ]
