@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, PermissionsMixin,AbstractBaseUser
-    
+from django.contrib.auth.models import User
+
+from django.contrib.postgres.fields import JSONField
+
 class UserAccountManager(BaseUserManager):
   def create_user(self, email,password=None,**other_fields):
     if not email:
@@ -61,82 +64,135 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 
 
-class StudentProfile(models.Model):
-    LOCATIONS = (
-        ('amman', 'Amman'),
-        ('Irbid', 'irbid'),
-        ('zarqa', 'Zarqa')
-    )
-    DEPARTMENTS = (
-        ("computer_science","Computer Science"),
-    )
-    
-    user = models.OneToOneField(CustomUser,on_delete=models.CASCADE,related_name="student",primary_key=True)
-    location = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
-    department = models.CharField(max_length=50,choices=DEPARTMENTS, null=True,blank=True)
-    phone = models.CharField(blank=True,null=True,max_length=50)
-    cv = models.FileField(upload_to="files\\cvs",null=True,blank=True)
-    img= models.ImageField(upload_to="files\\images",null=True,blank=True)
-    img_bk=models.ImageField(upload_to="files\\images",null=True,blank=True)
-    first_name = models.CharField(max_length=50,null=True,blank=True)
-    last_name = models.CharField(max_length=50,null=True,blank=True)
-    bio = models.TextField(max_length=255,null=True,blank=True)
 
-    # put forign key of ids that exsit 
-    # img_id=models.CharField(blank=True,null=True,max_length=50)
 
+class Department(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=50)
+
+class DepartmentAdminModel(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+
+class UniversitySupervisor(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    phone = models.CharField(max_length=50)
+    location = models.CharField(max_length=50)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE,null=True, blank=True)
 
 class UniversitySupervisorProfile(models.Model):
-    LOCATIONS = (
-        ('amman', 'Amman'),
-        ('Irbid', 'irbid'),
-        ('zarqa', 'Zarqa')
-    )
-    DEPARTMENTS = (
-        ("computer_science","Computer Science"),
-    )
-    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name="University_Supervisor",primary_key=True)
-    location = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
-    department = models.CharField(max_length=50,choices=DEPARTMENTS, null=True,blank=True)
-    phone = models.CharField(blank=True,null=True,max_length=50)
-    img= models.ImageField(upload_to="files\\images",null=True,blank=True)
-    img_bk=models.ImageField(upload_to="files\\images",null=True,blank=True)
-    first_name = models.CharField(max_length=50,null=True,blank=True)
-    last_name = models.CharField(max_length=50,null=True,blank=True)
+    id = models.AutoField(primary_key=True)
+    university_supervisor = models.OneToOneField(UniversitySupervisor, on_delete=models.CASCADE)
+    img = models.ImageField(upload_to="files\\images", null=True, blank=True)
+    img_bk = models.ImageField(upload_to="files\\images", null=True, blank=True)
+
+class Student(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    phone = models.CharField(max_length=50)
+    location = models.CharField(max_length=50)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE,null=True, blank=True)
+    company = models.ForeignKey('Company', on_delete=models.SET_NULL, null=True, blank=True)
+    company_supervisor = models.ForeignKey('CompanySupervisor', on_delete=models.SET_NULL, null=True, blank=True)
+    university_supervisor = models.ForeignKey(UniversitySupervisor, on_delete=models.SET_NULL, null=True, blank=True)
+
+class StudentProfile(models.Model):
+    id = models.AutoField(primary_key=True)
+    student = models.OneToOneField(Student, on_delete=models.CASCADE)
+    img = models.ImageField(upload_to="files\\images", null=True, blank=True)
+    img_bk = models.ImageField(upload_to="files\\images", null=True, blank=True)
+    bio = models.CharField(max_length=50, null=True, blank=True)
+    cv = models.FileField(upload_to="files\\cvs", null=True, blank=True)
+
+class WeeklyReport(models.Model):
+    id = models.AutoField(primary_key=True)
+    signature = models.CharField(max_length=50)
+    company_supervisor = models.ForeignKey('CompanySupervisor', on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    week_number = models.IntegerField()
+    date = models.DateField()
+    report_details = models.TextField()
+
+class Company(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
+    name = models.CharField(max_length=50)
+    phone = models.CharField(max_length=50)
+    location = models.CharField(max_length=50)
+    comp_id = models.CharField(max_length=50)
 
 class CompanyProfile(models.Model):
-    LOCATIONS = (
-        ('amman', 'Amman'),
-        ('Irbid', 'irbid'),
-        ('zarqa', 'Zarqa')
-    )
-    
-    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name="Company",primary_key=True)
-    location = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
-    phone = models.CharField(blank=True,null=True,max_length=50)
-    comp_id=models.CharField(blank=True,null=True,max_length=50)
-    img= models.ImageField(upload_to="files\\images",null=True,blank=True)
-    img_bk=models.ImageField(upload_to="files\\images",null=True,blank=True)
-    name = models.CharField(max_length=50,null=True,blank=True)
-    bio=models.CharField(max_length=50,null=True,blank=True)
-    
+    id = models.AutoField(primary_key=True)
+    company = models.OneToOneField(Company, on_delete=models.CASCADE)
+    img = models.ImageField(upload_to="files\\images", null=True, blank=True)
+    img_bk = models.ImageField(upload_to="files\\images", null=True, blank=True)
+    bio = models.CharField(max_length=50, null=True, blank=True)
 
+class Post(models.Model):
+    id = models.AutoField(primary_key=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    title = models.CharField(max_length=50)
+    training_mode = models.CharField(max_length=50, choices=[('remote', 'Remote'), ('onsite', 'Onsite')])
+    post_details = models.JSONField()
+    date = models.DateField(auto_now_add=True)
+
+class CompanySupervisor(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE,null=True, blank=True)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    phone = models.CharField(max_length=50)
+    location = models.CharField(max_length=50)
+    role = models.CharField(max_length=50)
 
 class CompanySupervisorProfile(models.Model):
-    LOCATIONS = (
-        ('amman', 'Amman'),
-        ('Irbid', 'irbid'),
-        ('zarqa', 'Zarqa')
+    id = models.AutoField(primary_key=True)
+    company_supervisor = models.OneToOneField(CompanySupervisor, on_delete=models.CASCADE)
+    img = models.ImageField(upload_to="files\\images", null=True, blank=True)
+    img_bk = models.ImageField(upload_to="files\\images", null=True, blank=True)
+
+class TrainingApplication(models.Model):
+    STATUS_CHOICES = (
+        ('PENDING', 'Pending'),
+        ('APPROVED', 'Approved'),
+        ('REJECTED', 'Rejected'),
     )
+
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    company_status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
+    university_supervisor_status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
+    department_status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
+
+    # when the application is approved by all parties a signal will be created to assign the student to the company
+    def is_approved(self):
+        return self.company_status == 'APPROVED' and self.university_supervisor_status == 'APPROVED' and self.department_status == 'APPROVED'
     
-    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name="Company_supervisor",primary_key=True)
-    location = models.CharField(max_length=50,choices=LOCATIONS,null=True,blank=True)
-    phone = models.CharField(blank=True,null=True,max_length=50)
-    role=models.CharField(blank=True,null=True,max_length=50)
-    img= models.ImageField(upload_to="files\\images",null=True,blank=True)
-    img_bk=models.ImageField(upload_to="files\\images",null=True,blank=True)
-    first_name = models.CharField(max_length=50,null=True,blank=True)
-    last_name = models.CharField(max_length=50,null=True,blank=True)
+    def approve_by_company(self, user):
+        if isinstance(user, Company):
+            self.company_status = 'APPROVED'
+            self.save()
+    def approve_by_university_supervisor(self, user):
+        if isinstance(user, UniversitySupervisor):
+            self.university_supervisor_status = 'APPROVED'
+            self.save()
+    def approve_by_department(self, user):
+        if user.is_staff:  # assuming department users are staff
+            self.department_status = 'APPROVED'
+            self.save()
+
+class StudentNotification(models.Model):
+    recipient = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    content = models.TextField()
+    read = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
 
-
+class UniversityNotification(models.Model):
+    recipient = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    training_application = models.ForeignKey(TrainingApplication, on_delete=models.CASCADE, null=True, blank=True)
+    content = models.TextField()
+    read = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
