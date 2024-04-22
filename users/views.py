@@ -42,13 +42,13 @@ from .serializers import (
     TrainingApplicationSerializer,
     )
 
-class UniversitySupervisorProfileList(generics.ListAPIView):
-    queryset = UniversitySupervisorProfile.objects.all()
-    serializer_class = UniversitySupervisorSerializer
+# class UniversitySupervisorProfileList(generics.ListAPIView):
+#     queryset = UniversitySupervisorProfile.objects.all()
+#     serializer_class = UniversitySupervisorSerializer
 
-class UniversitySupervisorProfileDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = UniversitySupervisorProfile.objects.all()
-    serializer_class = UniversitySupervisorSerializer
+# class UniversitySupervisorProfileDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = UniversitySupervisorProfile.objects.all()
+#     serializer_class = UniversitySupervisorSerializer
 
 class StudentList(generics.ListCreateAPIView):
     queryset = Student.objects.all()
@@ -161,6 +161,19 @@ class PostList(generics.ListCreateAPIView):
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = [AllowAny]
+
+class PostUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    lookup_url_kwarg = 'id'
+    permission_classes = [Company]
+
+class PostDeleteView(generics.DestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    lookup_url_kwarg = 'id'
+    permission_classes = [Company]
 
 class TrainingApplicationCreate(generics.CreateAPIView):
     queryset = TrainingApplication.objects.all()
