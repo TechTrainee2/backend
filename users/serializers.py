@@ -2,6 +2,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import (CustomUser,
                     StudentProfile,
                     UniversitySupervisorProfile,
@@ -19,8 +20,28 @@ from .models import (CustomUser,
 CustomUser = get_user_model()
 
 
+# class AssignUniversitySupervisorSerializer(serializers.ModelSerializer):
+#     email = serializers.CharField(source='user.email')
+#     image_url = serializers.SerializerMethodField()
+#     class Meta:
+#         model = UniversitySupervisor
+#         fields = ['email', 'img']
+            
+#     def get_image_url(self, obj):
+#         return 
 
-
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+ 
+        # Add custom claims
+        token['email'] = user.email
+        token['password'] = user.password
+        # ...
+ 
+        return token
+    
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
@@ -60,6 +81,12 @@ class StudentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Student
+        fields = '__all__'
+
+class RegisterStudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        read_only_fields = ["user"]
         fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
