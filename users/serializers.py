@@ -17,7 +17,7 @@ from .models import (CustomUser,
                     TrainingApplication,
                      )
 
-CustomUser = get_user_model()
+# CustomUser = get_user_model()
 
 
 # class AssignUniversitySupervisorSerializer(serializers.ModelSerializer):
@@ -86,6 +86,18 @@ class StudentSerializer(serializers.ModelSerializer):
 class RegisterStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
+        read_only_fields = ["user"]
+        fields = '__all__'
+
+class RegisterUniversitySuperSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UniversitySupervisor
+        read_only_fields = ["user"]
+        fields = '__all__'
+
+class CompanyRegisterCompSuperSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CompanySupervisor
         read_only_fields = ["user"]
         fields = '__all__'
 
