@@ -4,15 +4,15 @@ from . import views
 urlpatterns = [
     
     path('customUser', views.CustomUserListCreateAPIView.as_view(), name='student-list-create'),  #s7
-    path('me',views.RetrieveUserView.as_view()),
+    path('me',views.RetrieveUserView.as_view()),#s7
 # 
-    path('stdprof/<int:pk>',views.RetrieveStudentProfileView.as_view()),
-    path('uniprof/<int:pk>',views.RetrieveUniversitySupervisorProfileView.as_view()),
-    path('companyprof/<int:pk>',views.RetrieveCompanyProfileView.as_view()),
-    path('companysuperprof/<int:pk>',views.RetrieveCompanySupervisorProfileView.as_view()),
+    path('stdprof/<int:pk>',views.RetrieveStudentProfileView.as_view()),#s7
+    path('uniprof/<int:pk>',views.RetrieveUniversitySupervisorProfileView.as_view()),#s7
+    path('companyprof/<int:pk>',views.RetrieveCompanyProfileView.as_view()),#s7
+    path('companysuperprof/<int:pk>',views.RetrieveCompanySupervisorProfileView.as_view()),#s7
     
-    path('user/universitySupervisorProfiles', views.UniversitySupervisorProfileList.as_view(), name='university-supervisor-profile-list'),
-    path('user/universitySupervisorProfile/<int:pk>', views.UniversitySupervisorProfileDetail.as_view(), name='university-supervisor-profile-detail'),
+    path('user/universitySupervisorProfiles', views.UniversitySupervisorList.as_view(), name='university-supervisor-profile-list'),
+    path('user/universitySupervisorProfile/<int:pk>', views.UniversitySupervisorDetail.as_view(), name='university-supervisor-profile-detail'),
     
     path('user/studentProfiles', views.StudentList.as_view(), name='student-list'),
     path('user/studentProfile/<int:pk>', views.StudentDetail.as_view(), name='student-detail'),
@@ -28,8 +28,11 @@ urlpatterns = [
 
     path('company/posts', views.PostList.as_view(), name='post-list'),
     path('company/post/<int:pk>', views.PostDetail.as_view(), name='post-detail'),
+    path('company/post/<int:id>/', views.PostUpdateView.as_view(), name='post-update'),
+    path('company/post/<int:id>/', views.PostDeleteView.as_view(), name='post-delete'),
 
-     path('company/trainingApplication', views.TrainingApplicationCreate.as_view(), name='training-application-create'),
+
+    path('company/trainingApplication', views.TrainingApplicationCreate.as_view(), name='training-application-create'),
     path('company/trainingApplication/<int:pk>', views.TrainingApplicationUpdate.as_view(), name='training-application-update'),
 
 

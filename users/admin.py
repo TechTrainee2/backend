@@ -14,13 +14,13 @@ class UniversitySupervisorAdmin(admin.ModelAdmin):
     list_display = ['user', 'first_name', 'last_name', 'phone', 'location', 'department']
 
 class UniversitySupervisorProfileAdmin(admin.ModelAdmin):
-    list_display = ['id', 'university_supervisor', 'img', 'img_bk']
+    list_display = ['university_supervisor', 'img', 'img_bk']
 
 class StudentAdmin(admin.ModelAdmin):
     list_display = ['user', 'first_name', 'last_name', 'phone', 'location', 'department']
 
 class StudentProfileAdmin(admin.ModelAdmin):
-    list_display = ['id', 'student', 'img', 'img_bk', 'bio', 'cv']
+    list_display = ['student', 'img', 'img_bk', 'bio', 'cv']
 
 class WeeklyReportAdmin(admin.ModelAdmin):
     list_display = ['id', 'signature', 'company_supervisor', 'student', 'week_number', 'date', 'report_details']
@@ -29,7 +29,7 @@ class CompanyAdmin(admin.ModelAdmin):
     list_display = ['user', 'name', 'phone', 'location', 'comp_id']
 
 class CompanyProfileAdmin(admin.ModelAdmin):
-    list_display = ['id', 'company', 'img', 'img_bk', 'bio']
+    list_display = ['company', 'img', 'img_bk', 'bio']
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ['id', 'company', 'title', 'training_mode', 'post_details']
@@ -38,7 +38,7 @@ class CompanySupervisorAdmin(admin.ModelAdmin):
     list_display = ['user', 'company', 'first_name', 'last_name', 'phone', 'location', 'role']
 
 class CompanySupervisorProfileAdmin(admin.ModelAdmin):
-    list_display = ['id', 'company_supervisor', 'img', 'img_bk']
+    list_display = ['company_supervisor', 'img', 'img_bk']
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
