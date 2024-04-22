@@ -26,6 +26,8 @@ from .models import (
     TrainingApplication,
     )
 from .serializers import (
+    CompanyRegisterCompSuperSerializer,
+    RegisterUniversitySuperSerializer,
     StudentSerializer, 
     DepartmentSerializer, 
     CompanySerializer, 
@@ -160,29 +162,68 @@ class RegisterStudentView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = RegisterStudentSerializer
     permission_classes = [AllowAny]        #@TODO: Change to IsAuthenticated
+
     def post(self, request):
-        user = request.data.get['email']
-        serializer = RegisterStudentSerializer(data=user)
+        data = request.data
+        user = CustomUser.objects.create_user(email=data["email"], password=data["password"],account_type=data["account_type"])
+        
         user.account_type = 'STUDENT'
         user.save()
+    
+
+        student, created = Student.objects.get_or_create(user=user)
+        student.first_name = data["first_name"]
+        student.last_name = data["last_name"]
+        student.save()
+        # print(created)
+
+
+        return Response(StudentSerializer(student).data, status=status.HTTP_200_OK)
+        
 
 class RegisterUniSuperView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = RegisterUniversitySuperSerializer
     permission_classes = [AllowAny]        #@TODO: Change to IsAuthenticated
-    def perform_create(self, serializer):
-        user = serializer.save()
+
+    def post(self, request):
+        data = request.data
+        user = CustomUser.objects.create_user(email=data["email"], password=data["password"],account_type=data["account_type"])
+        
         user.account_type = 'UNIVERSITY_SUPERVISOR'
         user.save()
+    
+
+        uni_super, created = UniversitySupervisor.objects.get_or_create(user=user)
+        uni_super.first_name = data["first_name"]
+        uni_super.last_name = data["last_name"]
+        uni_super.save()
+        # print(created)
+
+
+        return Response(UniversitySupervisorSerializer(uni_super).data, status=status.HTTP_200_OK)
 
 class CompanyCompanySuperRegisterView(generics.CreateAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
+    qqueryset = CustomUser.objects.all()
+    serializer_class = CompanyRegisterCompSuperSerializer
     permission_classes = [AllowAny]        #@TODO: Change to IsAuthenticated
-    def perform_create(self, serializer):
-        user = serializer.save()
+
+    def post(self, request):
+        data = request.data
+        user = CustomUser.objects.create_user(email=data["email"], password=data["password"],account_type=data["account_type"])
+        
         user.account_type = 'COMPANY_SUPERVISOR'
         user.save()
+    
+
+        comp_super, created = CompanySupervisor.objects.get_or_create(user=user)
+        comp_super.first_name = data["first_name"]
+        comp_super.last_name = data["last_name"]
+        comp_super.save()
+        # print(created)
+
+
+        return Response(CompanySupervisorSerializer(comp_super).data, status=status.HTTP_200_OK)
 
 class RetrieveStudentProfileView(generics.RetrieveAPIView):
     queryset = StudentProfile.objects.all()

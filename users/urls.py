@@ -7,7 +7,7 @@ urlpatterns = [
     path('me',views.RetrieveUserView.as_view()),#s7
     path('register/student', views.RegisterStudentView.as_view()),
     path('register/unisuper', views.RegisterUniSuperView.as_view()),
-    path('register/compsuper', views.CompanyCompanySuperRegisterView.as_view()),
+    path('company/register/compsuper', views.CompanyCompanySuperRegisterView.as_view()),
     path('token/', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
 
     path('stdprof/<int:pk>',views.RetrieveStudentProfileView.as_view()),#s7
