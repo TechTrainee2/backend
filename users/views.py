@@ -57,10 +57,13 @@ from .serializers import (
 class StudentList(generics.ListCreateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+    permission_classes = [AllowAny]
+
 
 class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+    permission_classes = [AllowAny]
 
 class DepartmentList(generics.ListAPIView):
     queryset = Department.objects.all()
@@ -69,22 +72,27 @@ class DepartmentList(generics.ListAPIView):
 class CompanyList(generics.ListCreateAPIView):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
+    permission_classes = [AllowAny]
 
 class CompanyDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
+    permission_classes = [AllowAny]
 
 class CompanySupervisorList(generics.ListAPIView):
     queryset = CompanySupervisor.objects.all()
     serializer_class = CompanySupervisorSerializer
+    permission_classes = [AllowAny]
 
 class CompanySupervisorDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = CompanySupervisor.objects.all()
     serializer_class = CompanySupervisorSerializer
+    permission_classes = [AllowAny]
 
 class UniversitySupervisorList(generics.ListAPIView):
     queryset = UniversitySupervisor.objects.all()
     serializer_class = UniversitySupervisorSerializer
+    permission_classes = [AllowAny]
 
 class UniversitySupervisorStudentList(generics.ListAPIView):
     serializer_class = StudentSerializer
@@ -94,13 +102,21 @@ class UniversitySupervisorStudentList(generics.ListAPIView):
         supervisor = UniversitySupervisor.objects.get(user_id=supervisor_id)
         return Student.objects.filter(university_supervisor=supervisor)
 
-class UniversitySupervisorStudentList(generics.ListAPIView):
+class CompanySupervisorStudentList(generics.ListAPIView):
     serializer_class = StudentSerializer
-
+    permission_classes = [AllowAny]
     def get_queryset(self):
         supervisor_id = self.kwargs['pk']
-        supervisor = UniversitySupervisor.objects.get(user_id=supervisor_id)
-        return Student.objects.filter(university_supervisor=supervisor)
+        supervisor = CompanySupervisor.objects.get(user_id=supervisor_id)
+        return Student.objects.filter(company_supervisor=supervisor)
+    
+class CompanyStudentList(generics.ListAPIView):
+    serializer_class = StudentSerializer
+    permission_classes = [AllowAny]
+    def get_queryset(self):
+        company_id = self.kwargs['pk']
+        companyAcc = Company.objects.get(user_id=company_id)
+        return Student.objects.filter(company=companyAcc)    
 
 class AssignUniversitySupervisor(generics.UpdateAPIView):
     queryset = Student.objects.all()
@@ -116,17 +132,50 @@ class AssignUniversitySupervisor(generics.UpdateAPIView):
         student.save()
         return Response(StudentSerializer(student).data)
     
+class AssignCompanySupervisor(generics.UpdateAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+    lookup_url_kwarg = 'id'
+    permission_classes = [AllowAny]
+
+    def patch(self, request, *args, **kwargs):
+        student = self.get_object()
+        supervisor_id = request.data.get('company_supervisor')
+        supervisor = CompanySupervisor.objects.get(user_id=supervisor_id)
+        student.company_supervisor = supervisor
+        student.save()
+        return Response(StudentSerializer(student).data)
+    
+class AssignCompany(generics.UpdateAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+    lookup_url_kwarg = 'id'
+    permission_classes = [AllowAny]
+
+    def patch(self, request, *args, **kwargs):
+        student = self.get_object()
+        company_id = request.data.get('company')
+        companyAcc = Company.objects.get(user_id = company_id)
+        student.company = companyAcc
+        student.save()
+        return Response(StudentSerializer(student).data)
+
 class UniversitySupervisorDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = UniversitySupervisor.objects.all()
     serializer_class = UniversitySupervisorSerializer
+    permission_classes = [AllowAny]
 
 class CustomUserList(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+    permission_classes = [AllowAny]
+
+    
 
 class CustomUserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+    permission_classes = [AllowAny]
 
 
 
@@ -267,12 +316,12 @@ class PostList(generics.ListCreateAPIView):
 
         return queryset
 
-class PostDetail(generics.RetrieveUpdateDestroyAPIView):
+class PostCreateview(generics.CreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [AllowAny]
 
-class PostUpdateView(generics.RetrieveUpdateAPIView):
+class PostUpdateView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     lookup_url_kwarg = 'id'
@@ -287,8 +336,12 @@ class PostDeleteView(generics.DestroyAPIView):
 class TrainingApplicationCreate(generics.CreateAPIView):
     queryset = TrainingApplication.objects.all()
     serializer_class = TrainingApplicationSerializer
+    permission_classes = [AllowAny]
 
-class TrainingApplicationUpdate(generics.UpdateAPIView):
+class TrainingApplicationStatus(generics.RetrieveUpdateAPIView):
     queryset = TrainingApplication.objects.all()
     serializer_class = TrainingApplicationSerializer
+    # lookup_url_kwarg ="id"
+    permission_classes = [AllowAny]
+
 

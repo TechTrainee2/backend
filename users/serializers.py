@@ -48,40 +48,41 @@ class CustomUserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class DepartmentSerializer(serializers.ModelSerializer):
-    user = CustomUserSerializer()
     class Meta:
         model = Department
         fields = '__all__'
+        read_only_fields = ['user']
+
 
 class CompanySerializer(serializers.ModelSerializer):
-    user = CustomUserSerializer()
     class Meta:
         model = Company
         fields = '__all__'
+        read_only_fields = ['user']
 
 class CompanySupervisorSerializer(serializers.ModelSerializer):
-    user = CustomUserSerializer()
     class Meta:
         model = CompanySupervisor
         fields = '__all__'
+        read_only_fields = ['user']
+
 
 class UniversitySupervisorSerializer(serializers.ModelSerializer):
-    user = CustomUserSerializer()
-    department = DepartmentSerializer()
     class Meta:
         model = UniversitySupervisor
         fields = '__all__'
+        read_only_fields = ['user']
 
 class StudentSerializer(serializers.ModelSerializer):
-    user = CustomUserSerializer()
-    department = DepartmentSerializer()
-    company = CompanySerializer()
-    company_supervisor = CompanySupervisorSerializer()
-    university_supervisor = UniversitySupervisorSerializer()
+    # department = DepartmentSerializer()
+    # company = CompanySerializer()
+    # company_supervisor = CompanySupervisorSerializer()
+    # university_supervisor = UniversitySupervisorSerializer()
 
     class Meta:
         model = Student
         fields = '__all__'
+        read_only_fields = ['user']
 
 class RegisterStudentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -179,4 +180,4 @@ class PostSerializer(serializers.ModelSerializer):
 class TrainingApplicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrainingApplication
-        fields = ['id', 'student', 'training']
+        fields = '__all__'
