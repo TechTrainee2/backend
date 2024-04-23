@@ -25,8 +25,6 @@ urlpatterns = [
     path('user/student/assign/universitySupervisor/<int:id>', views.AssignUniversitySupervisor.as_view()),#s7
     path('user/student/assign/companySupervisor/<int:id>', views.AssignCompanySupervisor.as_view()),#s7
     path('user/student/assign/company/<int:id>', views.AssignCompany.as_view()),#s7
-    
-
 
     path('user/universitysuper/<int:pk>/students', views.UniversitySupervisorStudentList.as_view()),#s7
     path('user/companysuper/<int:pk>/students', views.CompanySupervisorStudentList.as_view()),#s7
@@ -47,5 +45,15 @@ urlpatterns = [
     path('company/student/trainingApplication', views.TrainingApplicationCreate.as_view(), name='training-application-create'),#s7
     # here u should pass the TrainingApplication id in the url
     path('company/TrainingApplicationStatus/<int:pk>/', views.TrainingApplicationStatus.as_view(), name='trainingapplication-status'),#s7
+    
     # report
+    # pk is student id
+    path('user/reports/<int:pk>', views.WeeklyReportList.as_view(), name='weekly_report_list'),
+    path('user/report', views.WeeklyReportCreate.as_view(), name='weekly_report_create'),
+    path('user/report/<int:pk>', views.WeeklyReportUpdate.as_view(), name='weekly_report_update'),
+
+    #notifications
+    path('user/studentNotification/<int:id>', views.StudentNotificationList.as_view(), name='student_notification_list'),
+    path('user/universityNotification/<int:id>', views.UniversityNotificationList.as_view(), name='university_notification_list'),
+
 ]

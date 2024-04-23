@@ -1,5 +1,5 @@
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework import generics
 from rest_framework import permissions,status
 from rest_framework.response import Response
@@ -11,7 +11,11 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import AllowAny
 
 from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework import status
 from .models import (
+    StudentNotification,
+    UniversityNotification,
     UniversitySupervisorProfile,
     Student, 
     Department, 
@@ -24,14 +28,17 @@ from .models import (
     CompanySupervisorProfile,
     Post,
     TrainingApplication,
+    WeeklyReport,
     )
 from .serializers import (
     CompanyRegisterCompSuperSerializer,
     RegisterUniversitySuperSerializer,
+    StudentNotificationSerializer,
     StudentSerializer, 
     DepartmentSerializer, 
     CompanySerializer, 
-    CompanySupervisorSerializer, 
+    CompanySupervisorSerializer,
+    UniversityNotificationSerializer, 
     UniversitySupervisorSerializer, 
     CustomUserSerializer,
     UserSerializer,
@@ -44,6 +51,7 @@ from .serializers import (
     TrainingApplicationSerializer,
     MyTokenObtainPairSerializer,
     RegisterStudentSerializer,
+    WeeklyReportSerializer,
     )
 
 # class UniversitySupervisorProfileList(generics.ListAPIView):
@@ -127,11 +135,19 @@ class AssignUniversitySupervisor(generics.UpdateAPIView):
     def patch(self, request, *args, **kwargs):
         student = self.get_object()
         supervisor_id = request.data.get('university_supervisor')
-        supervisor = UniversitySupervisor.objects.get(user_id=supervisor_id)
-        student.university_supervisor = supervisor
+
+        if supervisor_id is not None:
+            try:
+                university_supervisor = UniversitySupervisor.objects.get(user_id=supervisor_id)
+            except UniversitySupervisor.DoesNotExist:
+                return Response({"error": f"university_supervisor with id {supervisor_id} does not exist"}, status=status.HTTP_404_NOT_FOUND)
+            student.university_supervisor = university_supervisor
+        else:
+            student.university_supervisor = None
+            
         student.save()
         return Response(StudentSerializer(student).data)
-    
+
 class AssignCompanySupervisor(generics.UpdateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
@@ -141,11 +157,19 @@ class AssignCompanySupervisor(generics.UpdateAPIView):
     def patch(self, request, *args, **kwargs):
         student = self.get_object()
         supervisor_id = request.data.get('company_supervisor')
-        supervisor = CompanySupervisor.objects.get(user_id=supervisor_id)
-        student.company_supervisor = supervisor
+
+        if supervisor_id is not None:
+            try:
+                company_supervisor = CompanySupervisor.objects.get(user_id=supervisor_id)
+            except CompanySupervisor.DoesNotExist:
+                return Response({"error": f"company_supervisor with id {supervisor_id} does not exist"}, status=status.HTTP_404_NOT_FOUND)
+            student.company_supervisor = company_supervisor
+        else:
+            student.company_supervisor = None
+            
         student.save()
         return Response(StudentSerializer(student).data)
-    
+
 class AssignCompany(generics.UpdateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
@@ -155,8 +179,16 @@ class AssignCompany(generics.UpdateAPIView):
     def patch(self, request, *args, **kwargs):
         student = self.get_object()
         company_id = request.data.get('company')
-        companyAcc = Company.objects.get(user_id = company_id)
-        student.company = companyAcc
+
+        if company_id is not None:
+            try:
+                company = Company.objects.get(user_id=company_id)
+            except Company.DoesNotExist:
+                return Response({"error": f"Company with id {company_id} does not exist"}, status=status.HTTP_404_NOT_FOUND)
+            student.company = company
+        else:
+            student.company = None
+
         student.save()
         return Response(StudentSerializer(student).data)
 
@@ -344,4 +376,71 @@ class TrainingApplicationStatus(generics.RetrieveUpdateAPIView):
     # lookup_url_kwarg ="id"
     permission_classes = [AllowAny]
 
+class WeeklyReportList(generics.ListAPIView):
+    serializer_class = WeeklyReportSerializer
+    permission_classes = [AllowAny]
 
+    def get_queryset(self):
+        student_id = self.kwargs['pk']
+        return WeeklyReport.objects.filter(student=student_id)
+
+class WeeklyReportCreate(generics.CreateAPIView):
+    queryset = WeeklyReport.objects.all()
+    serializer_class = WeeklyReportSerializer
+    permission_classes = [AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        company_supervisor = request.data.get('companysupervisor_id')
+        university_supervisor = request.data.get('universitysupervisor_id')
+        student_id = request.data.get('student_id')
+
+        try:
+            student = Student.objects.get(user_id=student_id)
+        except Student.DoesNotExist:
+            return Response({"error": f"Student with id {student_id} does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+        report_details = request.data.get('report_details')
+        week_number = request.data.get('week_number')
+        date = request.data.get('date')
+        universitySupervisorSignature = request.data.get('universitySupervisorSignature')
+        companySupervisorSignature = request.data.get('companySupervisorSignature')
+
+        weekly_report = WeeklyReport.objects.create(
+            company_supervisor=company_supervisor,
+            university_supervisor=university_supervisor,
+            student=student,
+            report_details=report_details,
+            week_number=week_number,
+            date=date,
+            signatucompanySupervisorSignaturere=companySupervisorSignature,
+            universitySupervisorSignature=universitySupervisorSignature
+        )
+
+        return Response(WeeklyReportSerializer(weekly_report).data, status=status.HTTP_201_CREATED)
+    
+
+class WeeklyReportUpdate(generics.RetrieveUpdateAPIView):
+    queryset = WeeklyReport.objects.all()
+    serializer_class = WeeklyReportSerializer
+    # lookup_url_kwarg ="id"
+    permission_classes = [AllowAny]
+
+
+
+class StudentNotificationList(generics.ListAPIView):
+    serializer_class = StudentNotificationSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        student_id = self.kwargs['id']
+        student = get_object_or_404(CustomUser, id=student_id)
+        return StudentNotification.objects.filter(recipient=student)
+
+class UniversityNotificationList(generics.ListAPIView):
+    serializer_class = UniversityNotificationSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        university_supervisor_id = self.kwargs['id']
+        university_supervisor = get_object_or_404(CustomUser, id=university_supervisor_id)
+        return UniversityNotification.objects.filter(recipient=university_supervisor)

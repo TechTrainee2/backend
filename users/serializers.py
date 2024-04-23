@@ -3,8 +3,8 @@ from django.core import exceptions
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import (CustomUser,
-                    StudentProfile,
+from .models import (CustomUser, StudentNotification,
+                    StudentProfile, UniversityNotification,
                     UniversitySupervisorProfile,
                     CompanyProfile,
                     CompanySupervisorProfile,
@@ -15,6 +15,7 @@ from .models import (CustomUser,
                     UniversitySupervisor,
                     Post,
                     TrainingApplication,
+                    WeeklyReport,
                      )
 
 # CustomUser = get_user_model()
@@ -180,4 +181,19 @@ class PostSerializer(serializers.ModelSerializer):
 class TrainingApplicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrainingApplication
+        fields = '__all__'
+
+class WeeklyReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WeeklyReport
+        fields = '__all__'
+        
+class StudentNotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentNotification
+        fields = '__all__'
+
+class UniversityNotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UniversityNotification
         fields = '__all__'
