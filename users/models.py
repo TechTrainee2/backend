@@ -75,10 +75,10 @@ class DepartmentAdminModel(models.Model):
 
 class UniversitySupervisor(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    phone = models.CharField(max_length=50)
-    location = models.CharField(max_length=50)
+    first_name = models.CharField(max_length=50, null=True, blank=True)
+    last_name = models.CharField(max_length=50, null=True, blank=True)
+    phone = models.CharField(max_length=50, null=True, blank=True)
+    location = models.CharField(max_length=50, null=True, blank=True)
     department = models.ForeignKey(Department, on_delete=models.CASCADE,null=True, blank=True)
 
 class UniversitySupervisorProfile(models.Model):
@@ -114,10 +114,10 @@ class WeeklyReport(models.Model):
 
 class Company(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
-    name = models.CharField(max_length=50)
-    phone = models.CharField(max_length=50)
-    location = models.CharField(max_length=50)
-    comp_id = models.CharField(max_length=50)
+    name = models.CharField(max_length=50,null=True, blank=True)
+    phone = models.CharField(max_length=50,null=True, blank=True)
+    location = models.CharField(max_length=50,null=True, blank=True)
+    comp_id = models.CharField(max_length=50,null=True, blank=True)
 
 class CompanyProfile(models.Model):
     company = models.OneToOneField(Company, on_delete=models.CASCADE,primary_key=True)
@@ -135,11 +135,11 @@ class Post(models.Model):
 class CompanySupervisor(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE,null=True, blank=True)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    phone = models.CharField(max_length=50)
-    location = models.CharField(max_length=50)
-    role = models.CharField(max_length=50)
+    first_name = models.CharField(max_length=50, null=True, blank=True)
+    last_name = models.CharField(max_length=50, null=True, blank=True)
+    phone = models.CharField(max_length=50, null=True, blank=True)
+    location = models.CharField(max_length=50, null=True, blank=True)
+    role = models.CharField(max_length=50, null=True, blank=True)
 
 class CompanySupervisorProfile(models.Model):
     company_supervisor = models.OneToOneField(CompanySupervisor, on_delete=models.CASCADE,primary_key=True)
@@ -158,7 +158,7 @@ class TrainingApplication(models.Model):
     company_status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
     university_supervisor_status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
     department_status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
-
+    
     # when the application is approved by all parties a signal will be created to assign the student to the company
     def is_approved(self):
         return self.company_status == 'APPROVED' and self.university_supervisor_status == 'APPROVED' and self.department_status == 'APPROVED'
