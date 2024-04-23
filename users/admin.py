@@ -23,7 +23,7 @@ class StudentProfileAdmin(admin.ModelAdmin):
     list_display = ['student', 'img', 'img_bk', 'bio', 'cv']
 
 class WeeklyReportAdmin(admin.ModelAdmin):
-    list_display = ['id', 'signature', 'company_supervisor', 'student', 'week_number', 'date', 'report_details']
+    list_display = ['id', 'universitySupervisorSignature','companySupervisorSignature', 'company_supervisor', 'student', 'week_number', 'date', 'report_details']
 
 class CompanyAdmin(admin.ModelAdmin):
     list_display = ['user', 'name', 'phone', 'location', 'comp_id']

@@ -105,12 +105,14 @@ class StudentProfile(models.Model):
     cv = models.FileField(upload_to="files\\cvs", null=True, blank=True)
 
 class WeeklyReport(models.Model):
-    signature = models.CharField(max_length=50)
-    company_supervisor = models.ForeignKey('CompanySupervisor', on_delete=models.CASCADE)
+    universitySupervisorSignature = models.FileField(upload_to="files\\signatures", null=True, blank=True)
+    companySupervisorSignature = models.FileField(upload_to="files\\signatures", null=True, blank=True)
+    company_supervisor = models.ForeignKey('CompanySupervisor', on_delete=models.SET_NULL,null=True, blank=True)
+    university_supervisor = models.ForeignKey('UniversitySupervisor', on_delete=models.SET_NULL,null=True, blank=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    week_number = models.IntegerField()
-    date = models.DateField()
-    report_details = models.TextField()
+    week_number = models.IntegerField(null=True, blank=True)
+    date = models.DateField(max_length=50,null=True, blank=True)
+    report_details = models.TextField(max_length=50,null=True, blank=True)
 
 class Company(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
