@@ -4,10 +4,11 @@ from . import views
 urlpatterns = [
     
     path('customUser', views.CustomUserListCreateAPIView.as_view(), name='student-list-create'),  #s7
+    path('user/<int:pk>/', views.CustomUserDeleteAPIView.as_view(), name='delete_user'),
     path('me',views.RetrieveUserView.as_view()),#s7
     path('register/student', views.RegisterStudentView.as_view()),#s7
     path('register/unisuper', views.RegisterUniSuperView.as_view()),#s7
-    path('company/register/compsuper', views.CompanyCompanySuperRegisterView.as_view()),#s7
+    path('company/register/compsuper/<int:id>', views.CompanyCompanySuperRegisterView.as_view()),#s7
     path('token/', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),#s7
 
     path('stdprof/<int:pk>',views.RetrieveStudentProfileView.as_view()),#s7
@@ -28,7 +29,12 @@ urlpatterns = [
 
     path('user/universitysuper/<int:pk>/students', views.UniversitySupervisorStudentList.as_view()),#s7
     path('user/companysuper/<int:pk>/students', views.CompanySupervisorStudentList.as_view()),#s7
+    path('user/company/<int:pk>/compsuper', views.CompanyCompSupervisorList.as_view()),#s7
+  
+
+    # company list of all students and company supervisors
     path('user/company/<int:pk>/students', views.CompanyStudentList.as_view()),#s7
+    path('user/company/<int:pk>/CompSupervisors', views.CompanyCompSuperList.as_view()),#s7
 
     path('user/universitySupervisorProfile/<int:pk>', views.UniversitySupervisorDetail.as_view(), name='university-supervisor-profile-detail'),#s7
     path('user/studentProfile/<int:pk>', views.StudentDetail.as_view(), name='student-detail'),#s7

@@ -118,6 +118,14 @@ class CompanySupervisorStudentList(generics.ListAPIView):
         supervisor = CompanySupervisor.objects.get(user_id=supervisor_id)
         return Student.objects.filter(company_supervisor=supervisor)
     
+class CompanyCompSupervisorList(generics.ListAPIView):
+    serializer_class = CompanySupervisorSerializer
+    permission_classes = [AllowAny]
+    def get_queryset(self):
+        comp_id = self.kwargs['pk']
+        companyAcc = Company.objects.get(user_id=comp_id)
+        return CompanySupervisor.objects.filter(company=companyAcc)
+    
 class CompanyStudentList(generics.ListAPIView):
     serializer_class = StudentSerializer
     permission_classes = [AllowAny]
@@ -125,6 +133,14 @@ class CompanyStudentList(generics.ListAPIView):
         company_id = self.kwargs['pk']
         companyAcc = Company.objects.get(user_id=company_id)
         return Student.objects.filter(company=companyAcc)    
+    
+class CompanyCompSuperList(generics.ListAPIView):
+    serializer_class = CompanySupervisorSerializer
+    permission_classes = [AllowAny]
+    def get_queryset(self):
+        company_id = self.kwargs['pk']
+        companyAcc = Company.objects.get(user_id=company_id)
+        return CompanySupervisor.objects.filter(company=companyAcc)    
 
 class AssignUniversitySupervisor(generics.UpdateAPIView):
     queryset = Student.objects.all()
@@ -216,6 +232,11 @@ class CustomUserListCreateAPIView(generics.CreateAPIView):
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
 
+class CustomUserDeleteAPIView(generics.DestroyAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]
+
 class LoginView(generics.GenericAPIView):
     pass
 
@@ -284,27 +305,26 @@ class RegisterUniSuperView(generics.CreateAPIView):
 
         return Response(UniversitySupervisorSerializer(uni_super).data, status=status.HTTP_200_OK)
 
+
 class CompanyCompanySuperRegisterView(generics.CreateAPIView):
-    qqueryset = CustomUser.objects.all()
+    queryset = CustomUser.objects.all()
     serializer_class = CompanyRegisterCompSuperSerializer
+    lookup_url_kwarg = 'id'
     permission_classes = [AllowAny]        #@TODO: Change to IsAuthenticated
 
-    def post(self, request):
+    def post(self, request, id=None):  # Add id parameter here
         data = request.data
         user = CustomUser.objects.create_user(email=data["email"], password=data["password"],account_type=data["account_type"])
-        
+
+        companysupervisor, created = CompanySupervisor.objects.get_or_create(user=user)
         user.account_type = 'COMPANY_SUPERVISOR'
         user.save()
-    
-
-        comp_super, created = CompanySupervisor.objects.get_or_create(user=user)
-        comp_super.first_name = data["first_name"]
-        comp_super.last_name = data["last_name"]
-        comp_super.save()
-        # print(created)
-
-
-        return Response(CompanySupervisorSerializer(comp_super).data, status=status.HTTP_200_OK)
+        
+        company = Company.objects.get(user_id=id)  
+        companysupervisor.company = company
+        
+        companysupervisor.save()
+        return Response({"message": "Company supervisor created successfully"}, status=status.HTTP_201_CREATED)
 
 class RetrieveStudentProfileView(generics.RetrieveAPIView):
     queryset = StudentProfile.objects.all()
