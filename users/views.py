@@ -254,11 +254,11 @@ class RetrieveUserView(generics.GenericAPIView):
     serializer_class = UserGETSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    # def get(self, request):
-    #     user = request.user
-    #     user = UserGETSerializer(user)
+    def get(self, request):
+         user = request.user
+         user = UserGETSerializer(user)
 
-    #     return Response(user.data, status=status.HTTP_200_OK)
+         return Response(user.data, status=status.HTTP_200_OK)
     
 class RegisterStudentView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()

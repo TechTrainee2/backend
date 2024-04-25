@@ -28,9 +28,9 @@ SECRET_KEY = 'django-insecure-qz0%d43^qdmf1#+lvzfi8pzvg%xa2jc6vi6blg4$zsw5-_v20@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*","localhost:5000","localhost:3000"]
+ALLOWED_HOSTS = ["*","localhost:3000"]    #,"localhost:8000"
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5000",  
+    # "http://localhost:8000",  
     "http://localhost:3000",  
 ]
 
@@ -151,6 +151,35 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
 }
+
+# is it safe to use this?
+CORS_ALLOW_CREDENTIALS = True 
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_HTTP_ONLY = True
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000"
+]
+CORS_EXPOSE_HEADERS = ["Content-Type", "X-CSRFToken"]
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SAMESITE = "None"
+# SESSION_COOKIE_SAMESITE = "None"
+
+CORS_ALLOW_METHODS = (
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+)
+CORS_ALLOW_HEADERS = (
+    "accept",
+    "authorization",
+    "content-type",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+)
 # MEDIA_URL='/media/'
 # MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 # X_FRAME_OPTIONS = 'ALLOWALL'
