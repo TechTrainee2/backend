@@ -90,8 +90,7 @@ class Student(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    phone = models.CharField(max_length=50,null=True, blank=True)
-    location = models.CharField(max_length=50,null=True, blank=True)
+   
     department = models.ForeignKey(Department, on_delete=models.CASCADE,null=True, blank=True)
     company = models.ForeignKey('Company', on_delete=models.SET_NULL, null=True, blank=True)
     company_supervisor = models.ForeignKey('CompanySupervisor', on_delete=models.SET_NULL, null=True, blank=True)
@@ -103,7 +102,9 @@ class StudentProfile(models.Model):
     img_bk = models.ImageField(upload_to="files\\images", null=True, blank=True)
     bio = models.CharField(max_length=50, null=True, blank=True)
     cv = models.FileField(upload_to="files\\cvs", null=True, blank=True)
-
+    phone = models.CharField(max_length=50,null=True, blank=True)
+    location = models.CharField(max_length=50,null=True, blank=True)
+    
 class WeeklyReport(models.Model):
     universitySupervisorSignature = models.FileField(upload_to="files\\signatures", null=True, blank=True)
     companySupervisorSignature = models.FileField(upload_to="files\\signatures", null=True, blank=True)

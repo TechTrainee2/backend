@@ -208,6 +208,29 @@ class AssignCompany(generics.UpdateAPIView):
         student.save()
         return Response(StudentSerializer(student).data)
 
+#for testing 
+class AssignCompanySuper(generics.UpdateAPIView):
+    queryset = CompanySupervisor.objects.all()
+    serializer_class = CompanySupervisorSerializer
+    lookup_url_kwarg = 'id'
+    permission_classes = [AllowAny]
+
+    def patch(self, request, *args, **kwargs):
+        companysuper = self.get_object()
+        company_id = request.data.get('company')
+
+        if company_id is not None:
+            try:
+                company = Company.objects.get(user_id=company_id)
+            except Company.DoesNotExist:
+                return Response({"error": f"Company with id {company_id} does not exist"}, status=status.HTTP_404_NOT_FOUND)
+            companysuper.company = company
+        else:
+            companysuper.company = None
+
+        companysuper.save()
+        return Response(CompanySupervisorSerializer(companysuper).data)
+
 class UniversitySupervisorDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = UniversitySupervisor.objects.all()
     serializer_class = UniversitySupervisorSerializer
@@ -326,7 +349,7 @@ class CompanyCompanySuperRegisterView(generics.CreateAPIView):
         companysupervisor.save()
         return Response({"message": "Company supervisor created successfully"}, status=status.HTTP_201_CREATED)
 
-class RetrieveStudentProfileView(generics.RetrieveAPIView):
+class RetrieveStudentProfileView(generics.RetrieveUpdateDestroyAPIView):
     queryset = StudentProfile.objects.all()
     serializer_class = StdProfileGETSerializer
     permission_classes = [AllowAny]

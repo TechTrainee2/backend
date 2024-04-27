@@ -86,12 +86,12 @@ class StudentSerializer(serializers.ModelSerializer):
     # department = DepartmentSerializer()
     # company = CompanySerializer()
     # company_supervisor = CompanySupervisorSerializer()
-    university_supervisor = STDprofSupervisorSerializer()
+    # university_supervisor = STDprofSupervisorSerializer()
 
     class Meta:
         model = Student
-        fields = ["university_supervisor","first_name","last_name","phone","location"]
-        read_only_fields = ['user']
+        fields = ["first_name","last_name"]
+        read_only_fields = ['user','university_supervisor']
 
 class RegisterStudentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -154,11 +154,13 @@ class StdProfileGETSerializer(serializers.ModelSerializer):
     img_bk = serializers.ImageField(required=False)
     cv = serializers.FileField(required=False)
     bio=serializers.CharField(required=False)
+    phone=serializers.CharField(required=False)
+    location=serializers.CharField(required=False)
     student=StudentSerializer()
     
     class Meta:
         model =StudentProfile
-        fields =['student','img','img_bk','bio','cv']
+        fields =['student','img','img_bk','bio','cv','phone','location']
 
 class UniSuperGETSerializer(serializers.ModelSerializer):
     img = serializers.ImageField(required=False) 
