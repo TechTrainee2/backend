@@ -58,23 +58,23 @@ class DepartmentSerializer(serializers.ModelSerializer):
 class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
-        fields = '__all__'
+        fields = ['name','comp_id']
         read_only_fields = ['user']
 
 class CompanySupervisorSerializer(serializers.ModelSerializer):
     class Meta:
         model = CompanySupervisor
-        fields = '__all__'
+        fields = ['first_name',"last_name"]
         read_only_fields = ['user']
 
 
 class UniversitySupervisorSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
     class Meta:
         model = UniversitySupervisor
-        fields = '__all__'
+        fields = ["first_name","last_name"]
         read_only_fields = ['user']
-
-
 
 
 class STDprofSupervisorSerializer(serializers.ModelSerializer):
@@ -165,25 +165,36 @@ class StdProfileGETSerializer(serializers.ModelSerializer):
 class UniSuperGETSerializer(serializers.ModelSerializer):
     img = serializers.ImageField(required=False) 
     img_bk = serializers.ImageField(required=False)
+    phone=serializers.CharField(required=False)
+    location=serializers.CharField(required=False)
+    university_supervisor=UniversitySupervisorSerializer()
     class Meta:
         model =UniversitySupervisorProfile
-        fields ="__all__"
+        fields =['university_supervisor','img','img_bk','phone','location']
 
 class CompanyGETSerializer(serializers.ModelSerializer):
     img = serializers.ImageField(required=False) 
     img_bk = serializers.ImageField(required=False)
+    bio=serializers.CharField(required=False)
+    phone=serializers.CharField(required=False)
+    location=serializers.CharField(required=False)
+    company=CompanySerializer()
     class Meta:
         model =CompanyProfile
-        fields ="__all__"
-
+        fields =['company','img','img_bk','phone','location','bio']
    
 
 class CompanySuperGETSerializer(serializers.ModelSerializer):
     img = serializers.ImageField(required=False) 
     img_bk = serializers.ImageField(required=False)
+    phone=serializers.CharField(required=False)
+    location=serializers.CharField(required=False)
+    role=serializers.CharField(required=False)
+    company_supervisor=CompanySupervisorSerializer()
     class Meta:
         model =CompanySupervisorProfile
-        fields ="__all__"
+        fields =['company_supervisor','img','img_bk','phone','location','role']
+
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:

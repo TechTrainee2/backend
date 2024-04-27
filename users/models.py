@@ -77,20 +77,19 @@ class UniversitySupervisor(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
     first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
-    phone = models.CharField(max_length=50, null=True, blank=True)
-    location = models.CharField(max_length=50, null=True, blank=True)
     department = models.ForeignKey(Department, on_delete=models.CASCADE,null=True, blank=True)
 
 class UniversitySupervisorProfile(models.Model):
     university_supervisor = models.OneToOneField(UniversitySupervisor, on_delete=models.CASCADE,primary_key=True)
     img = models.ImageField(upload_to="files\\images", null=True, blank=True)
     img_bk = models.ImageField(upload_to="files\\images", null=True, blank=True)
+    phone = models.CharField(max_length=50, null=True, blank=True)
+    location = models.CharField(max_length=50, null=True, blank=True)
 
 class Student(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-   
     department = models.ForeignKey(Department, on_delete=models.CASCADE,null=True, blank=True)
     company = models.ForeignKey('Company', on_delete=models.SET_NULL, null=True, blank=True)
     company_supervisor = models.ForeignKey('CompanySupervisor', on_delete=models.SET_NULL, null=True, blank=True)
@@ -118,8 +117,6 @@ class WeeklyReport(models.Model):
 class Company(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
     name = models.CharField(max_length=50,null=True, blank=True)
-    phone = models.CharField(max_length=50,null=True, blank=True)
-    location = models.CharField(max_length=50,null=True, blank=True)
     comp_id = models.CharField(max_length=50,null=True, blank=True)
 
 class CompanyProfile(models.Model):
@@ -127,6 +124,8 @@ class CompanyProfile(models.Model):
     img = models.ImageField(upload_to="files\\images", null=True, blank=True)
     img_bk = models.ImageField(upload_to="files\\images", null=True, blank=True)
     bio = models.CharField(max_length=50, null=True, blank=True)
+    phone = models.CharField(max_length=50,null=True, blank=True)
+    location = models.CharField(max_length=50,null=True, blank=True)
 
 class Post(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
@@ -140,14 +139,14 @@ class CompanySupervisor(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE,null=True, blank=True)
     first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
-    phone = models.CharField(max_length=50, null=True, blank=True)
-    location = models.CharField(max_length=50, null=True, blank=True)
-    role = models.CharField(max_length=50, null=True, blank=True)
 
 class CompanySupervisorProfile(models.Model):
     company_supervisor = models.OneToOneField(CompanySupervisor, on_delete=models.CASCADE,primary_key=True)
     img = models.ImageField(upload_to="files\\images", null=True, blank=True)
     img_bk = models.ImageField(upload_to="files\\images", null=True, blank=True)
+    phone = models.CharField(max_length=50, null=True, blank=True)
+    location = models.CharField(max_length=50, null=True, blank=True)
+    role = models.CharField(max_length=50, null=True, blank=True)
 
 class TrainingApplication(models.Model):
     STATUS_CHOICES = (

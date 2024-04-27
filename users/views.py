@@ -355,17 +355,17 @@ class RetrieveStudentProfileView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [AllowAny]
 
 
-class RetrieveUniversitySupervisorProfileView(generics.RetrieveAPIView):
+class RetrieveUniversitySupervisorProfileView(generics.RetrieveUpdateDestroyAPIView):
     queryset = UniversitySupervisorProfile.objects.all()
     serializer_class =UniSuperGETSerializer
     permission_classes = [AllowAny]
 
-class RetrieveCompanyProfileView(generics.RetrieveAPIView):
+class RetrieveCompanyProfileView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CompanyProfile.objects.all()
     serializer_class =CompanyGETSerializer
     permission_classes = [AllowAny]
 
-class RetrieveCompanySupervisorProfileView(generics.RetrieveAPIView):
+class RetrieveCompanySupervisorProfileView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CompanySupervisorProfile.objects.all()
     serializer_class =CompanySuperGETSerializer
     permission_classes = [AllowAny]
