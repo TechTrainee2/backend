@@ -26,6 +26,9 @@ urlpatterns = [
     path('user/student/assign/universitySupervisor/<int:id>', views.AssignUniversitySupervisor.as_view()),#s7
     path('user/student/assign/companySupervisor/<int:id>', views.AssignCompanySupervisor.as_view()),#s7
     path('user/student/assign/company/<int:id>', views.AssignCompany.as_view()),#s7
+    #for testing 
+    path('user/compsuper/assign/company/<int:id>', views.AssignCompanySuper.as_view()),#s7
+
 
     path('user/universitysuper/<int:pk>/students', views.UniversitySupervisorStudentList.as_view()),#s7
     path('user/companysuper/<int:pk>/students', views.CompanySupervisorStudentList.as_view()),#s7
