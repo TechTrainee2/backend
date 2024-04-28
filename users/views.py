@@ -390,7 +390,15 @@ class PostList(generics.ListCreateAPIView):
             queryset = queryset.filter(training_mode=training_mode)
 
         return queryset
+    
+class CompPostList(generics.ListAPIView):
+    serializer_class = PostSerializer
 
+    def get_queryset(self):
+        company_id = self.kwargs['company_id']
+        company = get_object_or_404(Company, user_id=company_id)
+        return Post.objects.filter(company=company)
+    
 class PostCreateview(generics.CreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -402,11 +410,11 @@ class PostUpdateView(generics.RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'id'
     permission_classes = [AllowAny]
 
-class PostDeleteView(generics.DestroyAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-    lookup_url_kwarg = 'id'
-    permission_classes = [AllowAny]
+# class PostDeleteView(generics.DestroyAPIView):
+#     queryset = Post.objects.all()
+#     serializer_class = PostSerializer
+#     lookup_url_kwarg = 'id'
+#     permission_classes = [AllowAny]
 
 class TrainingApplicationCreate(generics.CreateAPIView):
     queryset = TrainingApplication.objects.all()
