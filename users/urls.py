@@ -48,8 +48,8 @@ urlpatterns = [
     path('company/posts', views.PostList.as_view(), name='post-list'),#s7
     path('company/post/<int:pk>', views.PostCreateview.as_view(), name='post-create'),#s7
     path('company/post/<int:id>/', views.PostUpdateView.as_view(), name='post-update'),#s7
-    path('company/post/<int:id>/', views.PostDeleteView.as_view(), name='post-delete'),#s7
-
+    # path('company/post/<int:id>/', views.PostDeleteView.as_view(), name='post-delete'),#s7
+    path('posts/<int:company_id>', views.CompPostList.as_view(), name='post_list'),
 
     path('company/student/trainingApplication', views.TrainingApplicationCreate.as_view(), name='training-application-create'),#s7
     # here u should pass the TrainingApplication id in the url
