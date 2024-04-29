@@ -62,7 +62,25 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
+# class UsersEmail(models.Model):
+#     ACCOUNT_TYPE_CHOICES = (
+#         ('STUDENT', 'Student'),
+#         ('UNIVERSITY_SUPERVISOR', 'University Supervisor'),
+#         ('COMPANY', 'Company'),
+#         ('COMPANY_SUPERVISOR', 'Company Supervisor'),
+#         ('DEPARTMENT', 'Department'),
+#         ('REGISTRATION', 'Registration'),
+#         ("ADMIN","Admin"),
+#     )
+#     account_type = models.CharField(max_length=50, choices=ACCOUNT_TYPE_CHOICES, default="ADMIN")
+  
+#     email = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True, blank=True)
+    
+#     # USERNAME_FIELD = 'email'
+#     # REQUIRED_FIELDS = []
 
+#     # def __str__(self):
+#     #     return self.email
 
 
 
