@@ -139,6 +139,7 @@ class CompanySupervisor(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE,null=True, blank=True)
     first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
+    role = models.CharField(max_length=50, null=True, blank=True)
 
 class CompanySupervisorProfile(models.Model):
     company_supervisor = models.OneToOneField(CompanySupervisor, on_delete=models.CASCADE,primary_key=True)
@@ -146,7 +147,6 @@ class CompanySupervisorProfile(models.Model):
     img_bk = models.ImageField(upload_to="files\\images", null=True, blank=True)
     phone = models.CharField(max_length=50, null=True, blank=True)
     location = models.CharField(max_length=50, null=True, blank=True)
-    role = models.CharField(max_length=50, null=True, blank=True)
 
 class TrainingApplication(models.Model):
     STATUS_CHOICES = (

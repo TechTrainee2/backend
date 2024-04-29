@@ -32,11 +32,12 @@ urlpatterns = [
 
     path('user/universitysuper/<int:pk>/students', views.UniversitySupervisorStudentList.as_view()),#s7
     path('user/companysuper/<int:pk>/students', views.CompanySupervisorStudentList.as_view()),#s7
-    path('user/company/<int:pk>/compsuper', views.CompanyCompSupervisorList.as_view()),#s7
+    # path('user/company/<int:pk>/compsuper', views.CompanyCompSupervisorList.as_view()),#s7
   
 
     # company list of all students and company supervisors
     path('user/company/<int:pk>/students', views.CompanyStudentList.as_view()),#s7
+    
     path('user/company/<int:pk>/CompSupervisors', views.CompanyCompSuperList.as_view()),#s7
 
     path('user/universitySupervisorProfile/<int:pk>', views.UniversitySupervisorDetail.as_view(), name='university-supervisor-profile-detail'),#s7

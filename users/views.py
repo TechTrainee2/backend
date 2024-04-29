@@ -52,6 +52,7 @@ from .serializers import (
     MyTokenObtainPairSerializer,
     RegisterStudentSerializer,
     WeeklyReportSerializer,
+    CompanySupervisorSerializer2
     )
 
 # class UniversitySupervisorProfileList(generics.ListAPIView):
@@ -135,12 +136,17 @@ class CompanyStudentList(generics.ListAPIView):
         return Student.objects.filter(company=companyAcc)    
     
 class CompanyCompSuperList(generics.ListAPIView):
-    serializer_class = CompanySupervisorSerializer
+    
+    serializer_class = CompanySupervisorSerializer2
     permission_classes = [AllowAny]
     def get_queryset(self):
         company_id = self.kwargs['pk']
         companyAcc = Company.objects.get(user_id=company_id)
-        return CompanySupervisor.objects.filter(company=companyAcc)    
+        company_supervisors = CompanySupervisor.objects.filter(company=companyAcc)
+        # @TODO: Add company supervisor profile for each compant supervisor and return it as a query
+        company_supervisor_profiles = CompanySupervisorProfile.objects.filter(company_supervisor__in=company_supervisors)
+        return company_supervisor_profiles
+          
 
 class AssignUniversitySupervisor(generics.UpdateAPIView):
     queryset = Student.objects.all()
@@ -340,6 +346,9 @@ class CompanyCompanySuperRegisterView(generics.CreateAPIView):
         user = CustomUser.objects.create_user(email=data["email"], password=data["password"],account_type=data["account_type"])
 
         companysupervisor, created = CompanySupervisor.objects.get_or_create(user=user)
+        companysupervisor.first_name = data["first_name"]
+        companysupervisor.last_name = data["last_name"]
+        companysupervisor.role=data["role"]
         user.account_type = 'COMPANY_SUPERVISOR'
         user.save()
         
