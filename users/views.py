@@ -28,7 +28,7 @@ from .models import (
     CompanySupervisorProfile,
     Post,
     TrainingApplication,
-    WeeklyReport,
+    WeeklyReport
     )
 from .serializers import (
     CompanyRegisterCompSuperSerializer,
@@ -52,7 +52,9 @@ from .serializers import (
     MyTokenObtainPairSerializer,
     RegisterStudentSerializer,
     WeeklyReportSerializer,
-    CompanySupervisorSerializer2
+    CompanySupervisorProfileSerializer2,
+    StudentProfileSerializer2,
+    UserEmailSerializer
     )
 
 # class UniversitySupervisorProfileList(generics.ListAPIView):
@@ -128,16 +130,19 @@ class CompanyCompSupervisorList(generics.ListAPIView):
         return CompanySupervisor.objects.filter(company=companyAcc)
     
 class CompanyStudentList(generics.ListAPIView):
-    serializer_class = StudentSerializer
+    serializer_class = StudentProfileSerializer2
     permission_classes = [AllowAny]
     def get_queryset(self):
         company_id = self.kwargs['pk']
         companyAcc = Company.objects.get(user_id=company_id)
-        return Student.objects.filter(company=companyAcc)    
+        student = Student.objects.filter(company=companyAcc)
+        # @TODO: Add company supervisor profile for each compant supervisor and return it as a query
+        student_profiles = StudentProfile.objects.filter(student__in=student)
+        return student_profiles   
     
 class CompanyCompSuperList(generics.ListAPIView):
     
-    serializer_class = CompanySupervisorSerializer2
+    serializer_class = CompanySupervisorProfileSerializer2
     permission_classes = [AllowAny]
     def get_queryset(self):
         company_id = self.kwargs['pk']
@@ -261,9 +266,14 @@ class CustomUserListCreateAPIView(generics.CreateAPIView):
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
 
-class CustomUserDeleteAPIView(generics.DestroyAPIView):
+class CustomUserDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [AllowAny]
+
+class CustomUserGetEmailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserEmailSerializer
     permission_classes = [AllowAny]
 
 class LoginView(generics.GenericAPIView):

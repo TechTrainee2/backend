@@ -5,6 +5,7 @@ urlpatterns = [
     
     path('customUser', views.CustomUserListCreateAPIView.as_view(), name='student-list-create'),  #s7
     path('user/<int:pk>/', views.CustomUserDeleteAPIView.as_view(), name='delete_user'),
+    path('userEmail/<int:pk>/', views.CustomUserGetEmailAPIView.as_view(), name='user_email'),
     path('me',views.RetrieveUserView.as_view()),#s7
     path('register/student', views.RegisterStudentView.as_view()),#s7
     path('register/unisuper', views.RegisterUniSuperView.as_view()),#s7
