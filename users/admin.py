@@ -35,10 +35,10 @@ class PostAdmin(admin.ModelAdmin):
     list_display = ['id', 'company', 'title', 'training_mode', 'post_details']
 
 class CompanySupervisorAdmin(admin.ModelAdmin):
-    list_display = ['user', 'company', 'first_name', 'last_name']
+    list_display = ['user', 'company', 'first_name', 'last_name','role']
 
 class CompanySupervisorProfileAdmin(admin.ModelAdmin):
-    list_display = ['company_supervisor', 'img', 'img_bk','phone', 'location','role']
+    list_display = ['company_supervisor', 'img', 'img_bk','phone', 'location']
 
 
 admin.site.register(CustomUser, CustomUserAdmin)

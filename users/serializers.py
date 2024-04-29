@@ -106,6 +106,7 @@ class RegisterUniversitySuperSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class CompanyRegisterCompSuperSerializer(serializers.ModelSerializer):
+   
     class Meta:
         model = CompanySupervisor
         read_only_fields = ["user"]
@@ -220,3 +221,26 @@ class UniversityNotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = UniversityNotification
         fields = '__all__'
+
+class CompanySupervisorSerializer2(serializers.ModelSerializer):
+    class Meta:
+        model = CompanySupervisor
+        fields = ['first_name',"last_name",'user']
+        # read_only_fields = ['user']
+# @TODO: create new serializer
+# @TODO: This serializer should get the profile for that company supervisor
+class CompanySupervisorSerializer2(serializers.ModelSerializer):
+    # profile = serializers.SerializerMethodField()
+    img = serializers.ImageField(required=False) 
+    img_bk = serializers.ImageField(required=False)
+    phone=serializers.CharField(required=False)
+    location=serializers.CharField(required=False)
+    # role=serializers.CharField(required=False)
+    company_supervisor=CompanySupervisorSerializer2()
+    class Meta:
+        model =CompanySupervisorProfile
+        fields =['company_supervisor','img','img_bk','phone','location']
+
+    # def get_profile(self, obj):
+    #     compsup_prof = CompanySupervisorProfile.objects.filter(company_supervisor=obj).first()
+    #     return CompanySuperGETSerializer(compsup_prof).data
