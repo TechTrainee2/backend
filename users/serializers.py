@@ -241,20 +241,26 @@ class CompanySupervisorProfileSerializer2(serializers.ModelSerializer):
     phone=serializers.CharField(required=False)
     location=serializers.CharField(required=False)
     # role=serializers.CharField(required=False)
-    company_supervisor=CompanySupervisorSerializer()
+    company_supervisor=CompanySupervisorSerializer2()
     class Meta:
         model =CompanySupervisorProfile
         fields =['company_supervisor','img','img_bk','phone','location']
 
-    # def get_profile(self, obj):
-    #     compsup_prof = CompanySupervisorProfile.objects.filter(company_supervisor=obj).first()
-    #     return CompanySuperGETSerializer(compsup_prof).data
+class CompanySerializer2(serializers.ModelSerializer):
+    class Meta:
+        model = Company
+        fields = ['name','comp_id','user']
+        # read_only_fields = ['user']
+
 
 class StudentSerializer2(serializers.ModelSerializer):
     company_supervisor = CompanySupervisorSerializer2()
+    company=CompanySerializer2()
     class Meta:
         model = Student
-        fields = ['first_name',"last_name",'user','company_supervisor']
+        fields = ['first_name',"last_name",'user','company_supervisor','company']
+
+
         # read_only_fields = ['user']
 # @TODO: create new serializer
 # @TODO: This serializer should get the profile for that company supervisor
@@ -266,6 +272,7 @@ class StudentProfileSerializer2(serializers.ModelSerializer):
     location=serializers.CharField(required=False)
     # department= serializers.CharField(required=False)
     # role=serializers.CharField(required=False)
+
     student=StudentSerializer2()
     class Meta:
         model =StudentProfile

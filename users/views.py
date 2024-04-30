@@ -54,7 +54,8 @@ from .serializers import (
     WeeklyReportSerializer,
     CompanySupervisorProfileSerializer2,
     StudentProfileSerializer2,
-    UserEmailSerializer
+    UserEmailSerializer,
+    StudentSerializer2
     )
 
 # class UniversitySupervisorProfileList(generics.ListAPIView):
