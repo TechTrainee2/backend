@@ -16,6 +16,7 @@ urlpatterns = [
     path('uniprof/<int:pk>',views.RetrieveUniversitySupervisorProfileView.as_view()),#s7
     path('companyprof/<int:pk>',views.RetrieveCompanyProfileView.as_view()),#s7
     path('companysuperprof/<int:pk>',views.RetrieveCompanySupervisorProfileView.as_view()),#s7
+    path('companysuperprof/get/<int:pk>',views.CompanySupervisorProfileView.as_view()),#s7
     
     path('user/universitySupervisors', views.UniversitySupervisorList.as_view(), name='university-supervisor-list'),#s7
     path('user/companySupervisors', views.CompanySupervisorList.as_view(), name='company-supervisor-list'),#s7
