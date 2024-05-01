@@ -55,7 +55,9 @@ from .serializers import (
     CompanySupervisorProfileSerializer2,
     StudentProfileSerializer2,
     UserEmailSerializer,
-    StudentSerializer2
+    StudentSerializer2,
+    PostSerializer2
+
     )
 
 # class UniversitySupervisorProfileList(generics.ListAPIView):
@@ -115,12 +117,16 @@ class UniversitySupervisorStudentList(generics.ListAPIView):
         return Student.objects.filter(university_supervisor=supervisor)
 
 class CompanySupervisorStudentList(generics.ListAPIView):
-    serializer_class = StudentSerializer
+    serializer_class = StudentProfileSerializer2
     permission_classes = [AllowAny]
     def get_queryset(self):
         supervisor_id = self.kwargs['pk']
         supervisor = CompanySupervisor.objects.get(user_id=supervisor_id)
-        return Student.objects.filter(company_supervisor=supervisor)
+        student = Student.objects.filter(company_supervisor=supervisor)
+        # @TODO: Add company supervisor profile for each compant supervisor and return it as a query
+        student_profiles = StudentProfile.objects.filter(student__in=student)
+        return student_profiles   
+    
     
 class CompanyCompSupervisorList(generics.ListAPIView):
     serializer_class = CompanySupervisorSerializer
@@ -388,6 +394,11 @@ class RetrieveCompanyProfileView(generics.RetrieveUpdateDestroyAPIView):
 class RetrieveCompanySupervisorProfileView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CompanySupervisorProfile.objects.all()
     serializer_class =CompanySuperGETSerializer
+    permission_classes = [AllowAny]
+
+class CompanySupervisorProfileView(generics.RetrieveAPIView):
+    queryset = CompanySupervisorProfile.objects.all()
+    serializer_class =CompanySupervisorProfileSerializer2
     permission_classes = [AllowAny]
 
 @method_decorator(csrf_exempt, name='dispatch')

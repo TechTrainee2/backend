@@ -277,3 +277,23 @@ class StudentProfileSerializer2(serializers.ModelSerializer):
     class Meta:
         model =StudentProfile
         fields =['student','img','img_bk','phone','location']
+
+class CompanyProfileSerializer2(serializers.ModelSerializer):
+    # profile = serializers.SerializerMethodField()
+    img = serializers.ImageField(required=False) 
+    img_bk = serializers.ImageField(required=False)
+    bio=serializers.CharField(required=False)
+    phone=serializers.CharField(required=False)
+    location=serializers.CharField(required=False)
+    # role=serializers.CharField(required=False)
+    company=CompanySerializer2()
+    class Meta:
+        model =CompanyProfile
+        fields =['company','img','img_bk','phone','location','bio']
+
+
+class PostSerializer2(serializers.ModelSerializer):
+    company = CompanySerializer2()
+    class Meta:
+        model = Post
+        fields = ['company','date','post_details','title','training_mode']
