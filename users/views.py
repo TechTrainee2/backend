@@ -56,7 +56,8 @@ from .serializers import (
     StudentProfileSerializer2,
     UserEmailSerializer,
     StudentSerializer2,
-    PostSerializer2
+    PostSerializer2,
+    TrainingApplicationSerializer2
 
     )
 
@@ -424,12 +425,16 @@ class PostList(generics.ListCreateAPIView):
     
 class CompPostList(generics.ListAPIView):
     serializer_class = PostSerializer
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
-        company_id = self.kwargs['company_id']
+        company_id = self.kwargs['pk']
         company = get_object_or_404(Company, user_id=company_id)
         return Post.objects.filter(company=company)
     
+
+
+
 class PostCreateview(generics.CreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -449,7 +454,7 @@ class PostUpdateView(generics.RetrieveUpdateDestroyAPIView):
 
 class TrainingApplicationCreate(generics.CreateAPIView):
     queryset = TrainingApplication.objects.all()
-    serializer_class = TrainingApplicationSerializer
+    serializer_class = TrainingApplicationSerializer2
     permission_classes = [AllowAny]
 
 class TrainingApplicationStatus(generics.RetrieveUpdateAPIView):
