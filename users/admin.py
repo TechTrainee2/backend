@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, Department, DepartmentAdminModel, UniversitySupervisor, UniversitySupervisorProfile, Student, StudentProfile, WeeklyReport, Company, CompanyProfile, Post, CompanySupervisor, CompanySupervisorProfile
+from .models import CustomUser, Department, DepartmentAdminModel, UniversitySupervisor, UniversitySupervisorProfile, Student, StudentProfile, WeeklyReport, Company, CompanyProfile, Post, CompanySupervisor, CompanySupervisorProfile, TrainingApplication
 
 class CustomUserAdmin(admin.ModelAdmin):
     list_display = ['email', 'account_type', 'is_active', 'is_staff']
@@ -40,6 +40,9 @@ class CompanySupervisorAdmin(admin.ModelAdmin):
 class CompanySupervisorProfileAdmin(admin.ModelAdmin):
     list_display = ['company_supervisor', 'img', 'img_bk','phone', 'location']
 
+class TrainingApplicationAdmin(admin.ModelAdmin):
+    list_display = ['student', 'company','department','university_supervisor','post','department_status','university_supervisor_status','company_status']
+
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Department, DepartmentAdmin)
@@ -54,3 +57,4 @@ admin.site.register(CompanyProfile, CompanyProfileAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(CompanySupervisor, CompanySupervisorAdmin)
 admin.site.register(CompanySupervisorProfile, CompanySupervisorProfileAdmin)
+admin.site.register(TrainingApplication, TrainingApplicationAdmin)
