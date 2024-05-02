@@ -109,12 +109,15 @@ class UniversitySupervisorList(generics.ListAPIView):
     permission_classes = [AllowAny]
 
 class UniversitySupervisorStudentList(generics.ListAPIView):
-    serializer_class = StudentSerializer
+    serializer_class = StudentProfileSerializer2
 
     def get_queryset(self):
         supervisor_id = self.kwargs['pk']
         supervisor = UniversitySupervisor.objects.get(user_id=supervisor_id)
-        return Student.objects.filter(university_supervisor=supervisor)
+        student = Student.objects.filter(university_supervisor=supervisor)
+        # @TODO: Add company supervisor profile for each compant supervisor and return it as a query
+        student_profiles = StudentProfile.objects.filter(student__in=student)
+        return student_profiles
 
 class CompanySupervisorStudentList(generics.ListAPIView):
     serializer_class = StudentProfileSerializer2
