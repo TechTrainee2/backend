@@ -174,6 +174,10 @@ class TrainingApplication(models.Model):
     )
 
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
+    university_supervisor = models.ForeignKey(UniversitySupervisor, on_delete=models.CASCADE, null=True, blank=True)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True, blank=True)
+
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     company_status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
     university_supervisor_status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
