@@ -57,7 +57,6 @@ from .serializers import (
     UserEmailSerializer,
     StudentSerializer2,
     PostSerializer2,
-    TrainingApplicationSerializer2
 
     )
 
@@ -432,7 +431,10 @@ class CompPostList(generics.ListAPIView):
         company = get_object_or_404(Company, user_id=company_id)
         return Post.objects.filter(company=company)
     
-
+class PostRetrive(generics.RetrieveAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [AllowAny]
+    queryset = Post.objects.all()
 
 
 class PostCreateview(generics.CreateAPIView):
@@ -454,8 +456,41 @@ class PostUpdateView(generics.RetrieveUpdateDestroyAPIView):
 
 class TrainingApplicationCreate(generics.CreateAPIView):
     queryset = TrainingApplication.objects.all()
-    serializer_class = TrainingApplicationSerializer2
+    serializer_class = TrainingApplicationSerializer
     permission_classes = [AllowAny]
+
+class TrainingApplicationRetrive(generics.RetrieveAPIView):
+    queryset = TrainingApplication.objects.all()
+    serializer_class = TrainingApplicationSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        student_id = self.kwargs['pk']
+        student = get_object_or_404(Student, user_id=student_id)
+        return TrainingApplication.objects.filter(student=student)
+        
+class TrainingApplicationRetrive2(generics.RetrieveUpdateAPIView):
+    serializer_class = TrainingApplicationSerializer
+    permission_classes = [AllowAny]
+    queryset = TrainingApplication.objects.all()
+
+class TrainingApplicationStudentList(generics.ListAPIView):
+    serializer_class = TrainingApplicationSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        student_id = self.kwargs['pk']
+        student = get_object_or_404(Student, user_id=student_id)
+        return TrainingApplication.objects.filter(student=student)
+    
+class TrainingApplicationCompanyList(generics.ListAPIView):
+    serializer_class = TrainingApplicationSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        company_id = self.kwargs['pk']
+        company = get_object_or_404(Company, user_id=company_id)
+        return TrainingApplication.objects.filter(company=company)
 
 class TrainingApplicationStatus(generics.RetrieveUpdateAPIView):
     queryset = TrainingApplication.objects.all()

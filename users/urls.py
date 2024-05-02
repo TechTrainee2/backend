@@ -54,10 +54,21 @@ urlpatterns = [
     path('company/post/<int:id>/', views.PostUpdateView.as_view(), name='post-update'),#s7
     # path('company/post/<int:id>/', views.PostDeleteView.as_view(), name='post-delete'),#s7
     path('posts/<int:pk>', views.CompPostList.as_view(), name='post_list'),
+    path('post/<int:pk>', views.PostRetrive.as_view(), name='post_retrive'),
 
     path('company/student/trainingApplication', views.TrainingApplicationCreate.as_view(), name='training-application-create'),#s7
-    # here u should pass the TrainingApplication id in the url
-    path('company/TrainingApplicationStatus/<int:pk>/', views.TrainingApplicationStatus.as_view(), name='trainingapplication-status'),#s7
+    # path('company/student/trainingApplication/<int:pk>', views.TrainingApplicationRetrive.as_view(), name='training-application-create'),#s7
+
+    # the company that std applied to
+    path('company/student/trainingApplications/<int:pk>', views.TrainingApplicationStudentList.as_view(), name='training-application-create'),#s7
+    
+    path('company/company/trainingApplications/<int:pk>', views.TrainingApplicationCompanyList.as_view(), name='training-application-company'),#s7
+
+     #using training application id (we used this)
+    path('company/student/trainingApplication/<int:pk>', views.TrainingApplicationRetrive2.as_view(), name='training-application-view'),#s7
+
+    # to update on the application status
+    # path('company/TrainingApplicationStatus/<int:pk>/', views.TrainingApplicationStatus.as_view(), name='trainingapplication-status'),#s7
     
     # report
     # pk is student id

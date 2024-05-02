@@ -297,11 +297,3 @@ class PostSerializer2(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['company','date','post_details','title','training_mode']
-
-
-
-class TrainingApplicationSerializer2(serializers.ModelSerializer):
-    # post=PostSerializer()
-    class Meta:
-        model = TrainingApplication
-        fields = '__all__'
