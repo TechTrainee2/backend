@@ -34,6 +34,9 @@ urlpatterns = [
 
 
     path('user/universitysuper/<int:pk>/students', views.UniversitySupervisorStudentList.as_view()),#s7
+
+    # path('user/universitysuper1/<int:supervisor_id>/students', views.UniversitySupervisorStudentList2.as_view()),#s7
+
     path('user/companysuper/<int:pk>/students', views.CompanySupervisorStudentList.as_view()),#s7
     # path('user/company/<int:pk>/compsuper', views.CompanyCompSupervisorList.as_view()),#s7
   
@@ -58,11 +61,18 @@ urlpatterns = [
 
     path('company/student/trainingApplication', views.TrainingApplicationCreate.as_view(), name='training-application-create'),#s7
     # path('company/student/trainingApplication/<int:pk>', views.TrainingApplicationRetrive.as_view(), name='training-application-create'),#s7
+    
+    # get all training applications
+    path('dep/student/trainingApplications', views.TrainingApplicationDepList.as_view(), name='training-application-list-dep'),#s7
 
     # the company that std applied to
     path('company/student/trainingApplications/<int:pk>', views.TrainingApplicationStudentList.as_view(), name='training-application-create'),#s7
     
+    # using company id
     path('company/company/trainingApplications/<int:pk>', views.TrainingApplicationCompanyList.as_view(), name='training-application-company'),#s7
+    
+    #using uinversity supervisor id
+    path('unisuper/trainingApplications/<int:pk>', views.TrainingApplicationUniSuperList.as_view(), name='training-application-company'),#s7
 
      #using training application id (we used this)
     path('company/student/trainingApplication/<int:pk>', views.TrainingApplicationRetrive2.as_view(), name='training-application-view'),#s7
