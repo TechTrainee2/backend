@@ -76,6 +76,12 @@ class UniversitySupervisorSerializer(serializers.ModelSerializer):
         fields = ["first_name","last_name"]
         read_only_fields = ['user']
 
+class UniversitySupervisorSerializer2(serializers.ModelSerializer):
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    class Meta:
+        model = UniversitySupervisor
+        fields = ["first_name","last_name",'user']
 
 class STDprofSupervisorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -260,6 +266,26 @@ class StudentSerializer2(serializers.ModelSerializer):
         model = Student
         fields = ['first_name',"last_name",'user','company_supervisor','company']
 
+class StudentSerializer3(serializers.ModelSerializer):
+    company_supervisor = CompanySupervisorSerializer2()
+    company=CompanySerializer2()
+    university_supervisor=UniversitySupervisorSerializer2()
+    class Meta:
+        model = Student
+        fields = ['first_name',"last_name",'user','company_supervisor','company','university_supervisor']
+
+# Stretch goal
+
+# class StudentSerializer4(serializers.ModelSerializer):
+#     profile = serializers.SerializerMethodField()
+#     class Meta:
+#         model = Student
+#         fields = ['user','profile']
+#     def get_profile(self, obj):
+#         current=StudentProfile.objects.filter(student=obj).first()
+#         return StudentProfileSerializer2(current).data
+    
+
 
         # read_only_fields = ['user']
 # @TODO: create new serializer
@@ -297,3 +323,8 @@ class PostSerializer2(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['company','date','post_details','title','training_mode']
+
+class TrainingApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TrainingApplication
+        fields = '__all__'

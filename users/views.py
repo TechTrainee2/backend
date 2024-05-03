@@ -57,6 +57,8 @@ from .serializers import (
     UserEmailSerializer,
     StudentSerializer2,
     PostSerializer2,
+    UniversitySupervisorSerializer2,
+    StudentSerializer3
 
     )
 
@@ -70,7 +72,7 @@ from .serializers import (
 
 class StudentList(generics.ListCreateAPIView):
     queryset = Student.objects.all()
-    serializer_class = StudentSerializer
+    serializer_class = StudentSerializer3
     permission_classes = [AllowAny]
 
 
@@ -105,16 +107,28 @@ class CompanySupervisorDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class UniversitySupervisorList(generics.ListAPIView):
     queryset = UniversitySupervisor.objects.all()
-    serializer_class = UniversitySupervisorSerializer
+    serializer_class = UniversitySupervisorSerializer2
     permission_classes = [AllowAny]
 
 class UniversitySupervisorStudentList(generics.ListAPIView):
-    serializer_class = StudentSerializer
+    serializer_class = StudentProfileSerializer2
 
     def get_queryset(self):
         supervisor_id = self.kwargs['pk']
         supervisor = UniversitySupervisor.objects.get(user_id=supervisor_id)
-        return Student.objects.filter(university_supervisor=supervisor)
+        student = Student.objects.filter(university_supervisor=supervisor)
+        # @TODO: Add company supervisor profile for each compant supervisor and return it as a query
+        student_profiles = StudentProfile.objects.filter(student__in=student)
+        return student_profiles
+    
+# class UniversitySupervisorStudentList2(generics.ListAPIView):
+#     serializer_class = StudentSerializer3
+
+#     def get_queryset(self):
+#         supervisor_id = self.kwargs['supervisor_id']
+#         applications = TrainingApplication.objects.filter(university_supervisor_id=supervisor_id)
+#         students = Student.objects.filter(trainingapplication__in=applications).distinct()
+#         return students
 
 class CompanySupervisorStudentList(generics.ListAPIView):
     serializer_class = StudentProfileSerializer2
@@ -459,6 +473,11 @@ class TrainingApplicationCreate(generics.CreateAPIView):
     serializer_class = TrainingApplicationSerializer
     permission_classes = [AllowAny]
 
+class TrainingApplicationDepList(generics.ListAPIView):
+    queryset = TrainingApplication.objects.all()
+    serializer_class = TrainingApplicationSerializer
+    permission_classes = [AllowAny]
+
 class TrainingApplicationRetrive(generics.RetrieveAPIView):
     queryset = TrainingApplication.objects.all()
     serializer_class = TrainingApplicationSerializer
@@ -491,6 +510,15 @@ class TrainingApplicationCompanyList(generics.ListAPIView):
         company_id = self.kwargs['pk']
         company = get_object_or_404(Company, user_id=company_id)
         return TrainingApplication.objects.filter(company=company)
+
+class TrainingApplicationUniSuperList(generics.ListAPIView):
+    serializer_class = TrainingApplicationSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        unisuper_id = self.kwargs['pk']
+        unisuper = get_object_or_404(UniversitySupervisor, user_id=unisuper_id)
+        return TrainingApplication.objects.filter(university_supervisor=unisuper)
 
 class TrainingApplicationStatus(generics.RetrieveUpdateAPIView):
     queryset = TrainingApplication.objects.all()

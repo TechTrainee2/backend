@@ -43,6 +43,8 @@ class CompanySupervisorProfileAdmin(admin.ModelAdmin):
 class TrainingApplicationAdmin(admin.ModelAdmin):
     list_display = ['student', 'company','department','university_supervisor','post','department_status','university_supervisor_status','company_status']
 
+# class RegisterAdmin(admin.ModelAdmin):
+#     list_display = ['id', 'name']
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Department, DepartmentAdmin)
