@@ -394,6 +394,10 @@ class RetrieveStudentProfileView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = StdProfileGETSerializer
     permission_classes = [AllowAny]
 
+class StudentProfileView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+    permission_classes = [AllowAny]
 
 class RetrieveUniversitySupervisorProfileView(generics.RetrieveUpdateDestroyAPIView):
     queryset = UniversitySupervisorProfile.objects.all()
