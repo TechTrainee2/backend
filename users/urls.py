@@ -51,12 +51,23 @@ urlpatterns = [
 
     path('user/universitySupervisorProfile/<int:pk>', views.UniversitySupervisorDetail.as_view(), name='university-supervisor-profile-detail'),#s7
     path('user/studentProfile/<int:pk>', views.StudentDetail.as_view(), name='student-detail'),#s7
+
+    path('user/studentProfile10/<int:pk>', views.StudentDetail10.as_view(), name='student-detail'),#s7
+
+
+
     path('user/company/<int:pk>', views.CompanyDetail.as_view(), name='company-detail'),#s7
     path('user/companySupervisor/<int:pk>', views.CompanySupervisorDetail.as_view(), name='company-supervisor-detail'),#s7
     # path('user/user/<int:pk>', views.CustomUserDetail.as_view(), name='custom-user-detail'),#Why?
 
     path('company/posts', views.PostList.as_view(), name='post-list'),#s7
     path('company/post/<int:pk>', views.PostCreateview.as_view(), name='post-create'),#s7
+
+
+# HBD
+ path('company/post', views.PostCreateview.as_view(), name='post-create'),#s7
+
+    
     path('company/post/<int:id>/', views.PostUpdateView.as_view(), name='post-update'),#s7
     # path('company/post/<int:id>/', views.PostDeleteView.as_view(), name='post-delete'),#s7
     path('posts/<int:pk>', views.CompPostList.as_view(), name='post_list'),
@@ -86,11 +97,11 @@ urlpatterns = [
     # report
     # pk is student id
     path('user/reports/<int:pk>', views.WeeklyReportList.as_view(), name='weekly_report_list'),
-    path('user/report', views.WeeklyReportCreate.as_view(), name='weekly_report_create'),
-    path('user/report/<int:pk>', views.WeeklyReportUpdate.as_view(), name='weekly_report_update'),
+    path('user/report/<int:pk>', views.WeeklyReportCreate.as_view(), name='weekly_report_create'),
+    path('user/report/update/<int:pk>', views.WeeklyReportUpdate.as_view(), name='weekly_report_update'),
 
     #notifications
-    path('user/studentNotification/<int:id>', views.StudentNotificationList.as_view(), name='student_notification_list'),
-    path('user/universityNotification/<int:id>', views.UniversityNotificationList.as_view(), name='university_notification_list'),
+    # path('user/studentNotification/<int:id>', views.StudentNotificationList.as_view(), name='student_notification_list'),
+    # path('user/universityNotification/<int:id>', views.UniversityNotificationList.as_view(), name='university_notification_list'),
 
 ]

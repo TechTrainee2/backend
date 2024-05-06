@@ -23,7 +23,7 @@ class StudentProfileAdmin(admin.ModelAdmin):
     list_display = ['student', 'img', 'img_bk', 'bio', 'cv','phone', 'location']
 
 class WeeklyReportAdmin(admin.ModelAdmin):
-    list_display = ['id', 'universitySupervisorSignature','companySupervisorSignature', 'company_supervisor', 'student', 'week_number', 'date', 'report_details']
+    list_display = ['id','date_begin','date_end', 'universitySupervisorSignature','companySupervisorSignature', 'company_supervisor', 'student', 'week_number', 'table_data']
 
 class CompanyAdmin(admin.ModelAdmin):
     list_display = ['user', 'name', 'comp_id']
@@ -53,7 +53,9 @@ admin.site.register(UniversitySupervisor, UniversitySupervisorAdmin)
 admin.site.register(UniversitySupervisorProfile, UniversitySupervisorProfileAdmin)
 admin.site.register(Student, StudentAdmin)
 admin.site.register(StudentProfile, StudentProfileAdmin)
+
 admin.site.register(WeeklyReport, WeeklyReportAdmin)
+
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(CompanyProfile, CompanyProfileAdmin)
 admin.site.register(Post, PostAdmin)

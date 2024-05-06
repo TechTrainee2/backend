@@ -99,6 +99,17 @@ class StudentSerializer(serializers.ModelSerializer):
         fields = ["first_name","last_name"]
         read_only_fields = ['user','university_supervisor']
 
+class StudentSerializer10(serializers.ModelSerializer):
+    # department = DepartmentSerializer()
+    # company = CompanySerializer()
+    # company_supervisor = CompanySupervisorSerializer()
+    # university_supervisor = STDprofSupervisorSerializer()
+
+    class Meta:
+        model = Student
+        fields = ["first_name","last_name","university_supervisor","user"]
+        # read_only_fields = ['user','university_supervisor']
+
 class RegisterStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
@@ -222,6 +233,15 @@ class WeeklyReportSerializer(serializers.ModelSerializer):
         model = WeeklyReport
         fields = '__all__'
         
+class WeeklyReportSerializerCreate(serializers.ModelSerializer):
+    class Meta:
+        model = WeeklyReport
+        fields = ['report_details', 'week_number', 'date_begin','date_end', 'universitySupervisorSignature', 'companySupervisorSignature', 'table_data']
+        read_only_fields = ['student']
+
+
+
+
 class StudentNotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentNotification
