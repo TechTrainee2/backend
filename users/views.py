@@ -58,7 +58,9 @@ from .serializers import (
     StudentSerializer2,
     PostSerializer2,
     UniversitySupervisorSerializer2,
-    StudentSerializer3
+    StudentSerializer3,
+    StudentSerializer10,
+    WeeklyReportSerializerCreate
 
     )
 
@@ -81,8 +83,15 @@ class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = StudentSerializer
     permission_classes = [AllowAny]
 
+
+class StudentDetail10(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer10
+    permission_classes = [AllowAny]
+
 class DepartmentList(generics.ListAPIView):
     queryset = Department.objects.all()
+    permission_classes = [AllowAny]
     serializer_class = DepartmentSerializer
 
 class CompanyList(generics.ListCreateAPIView):
@@ -112,6 +121,7 @@ class UniversitySupervisorList(generics.ListAPIView):
 
 class UniversitySupervisorStudentList(generics.ListAPIView):
     serializer_class = StudentProfileSerializer2
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         supervisor_id = self.kwargs['pk']
@@ -538,45 +548,36 @@ class WeeklyReportList(generics.ListAPIView):
         student_id = self.kwargs['pk']
         return WeeklyReport.objects.filter(student=student_id)
 
+
+
+
 class WeeklyReportCreate(generics.CreateAPIView):
     queryset = WeeklyReport.objects.all()
-    serializer_class = WeeklyReportSerializer
+    serializer_class = WeeklyReportSerializerCreate
     permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
-        company_supervisor = request.data.get('companysupervisor_id')
-        university_supervisor = request.data.get('universitysupervisor_id')
-        student_id = request.data.get('student_id')
+        student_id = kwargs.get('pk')  # Get student_id from URL parameters
 
         try:
-            student = Student.objects.get(user_id=student_id)
+            student = Student.objects.get(pk=student_id)
         except Student.DoesNotExist:
             return Response({"error": f"Student with id {student_id} does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
-        report_details = request.data.get('report_details')
-        week_number = request.data.get('week_number')
-        date = request.data.get('date')
-        universitySupervisorSignature = request.data.get('universitySupervisorSignature')
-        companySupervisorSignature = request.data.get('companySupervisorSignature')
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(student=student)
 
-        weekly_report = WeeklyReport.objects.create(
-            company_supervisor=company_supervisor,
-            university_supervisor=university_supervisor,
-            student=student,
-            report_details=report_details,
-            week_number=week_number,
-            date=date,
-            signatucompanySupervisorSignaturere=companySupervisorSignature,
-            universitySupervisorSignature=universitySupervisorSignature
-        )
-
-        return Response(WeeklyReportSerializer(weekly_report).data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+   
     
 
-class WeeklyReportUpdate(generics.RetrieveUpdateAPIView):
+
+
+
+class WeeklyReportUpdate(generics.RetrieveUpdateDestroyAPIView):
     queryset = WeeklyReport.objects.all()
     serializer_class = WeeklyReportSerializer
-    # lookup_url_kwarg ="id"
     permission_classes = [AllowAny]
 
 

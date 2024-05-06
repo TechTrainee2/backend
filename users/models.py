@@ -3,6 +3,7 @@ from django.contrib.auth.models import BaseUserManager, PermissionsMixin,Abstrac
 from django.contrib.auth.models import User
 
 from django.contrib.postgres.fields import JSONField
+ 
 
 class UserAccountManager(BaseUserManager):
   def create_user(self, email,password=None,**other_fields):
@@ -122,6 +123,13 @@ class StudentProfile(models.Model):
     phone = models.CharField(max_length=50,null=True, blank=True)
     location = models.CharField(max_length=50,null=True, blank=True)
     
+
+
+
+
+
+
+
 class WeeklyReport(models.Model):
     universitySupervisorSignature = models.FileField(upload_to="files\\signatures", null=True, blank=True)
     companySupervisorSignature = models.FileField(upload_to="files\\signatures", null=True, blank=True)
@@ -129,8 +137,20 @@ class WeeklyReport(models.Model):
     university_supervisor = models.ForeignKey('UniversitySupervisor', on_delete=models.SET_NULL,null=True, blank=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     week_number = models.IntegerField(null=True, blank=True)
-    date = models.DateField(max_length=50,null=True, blank=True)
+    date_begin = models.DateField(max_length=50,null=True, blank=True)
+    date_end = models.DateField(max_length=50,null=True, blank=True)
+
     report_details = models.TextField(max_length=50,null=True, blank=True)
+    table_data = models.JSONField(default=list) # Add this line
+
+    def __str__(self):
+        return self.report_details
+
+
+
+
+
+
 
 class Company(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
