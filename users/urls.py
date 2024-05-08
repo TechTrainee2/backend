@@ -15,6 +15,9 @@ urlpatterns = [
     path('token/', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),#s7
 
     path('stdprof/<int:pk>',views.RetrieveStudentProfileView.as_view()),#s7
+
+    path('std/stdprof/<int:pk>',views.StdProfileUpdate.as_view()),#s7
+
     path('stdupdate/<int:pk>',views.StudentProfileView.as_view()),#s7
     path('uniprof/<int:pk>',views.RetrieveUniversitySupervisorProfileView.as_view()),#s7
     path('companyprof/<int:pk>',views.RetrieveCompanyProfileView.as_view()),#s7
