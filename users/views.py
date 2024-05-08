@@ -404,6 +404,30 @@ class RetrieveStudentProfileView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = StdProfileGETSerializer
     permission_classes = [AllowAny]
 
+class StdProfileUpdate(generics.UpdateAPIView):
+    queryset = StudentProfile.objects.all()
+    serializer_class = StdProfileGETSerializer
+    permission_classes = [AllowAny]
+
+    def update(self, request, *args, **kwargs):
+        student_id = kwargs.get('pk')  # Get student_id from URL parameters
+
+        try:
+            student = Student.objects.get(pk=student_id)
+            student_profile = StudentProfile.objects.get(student=student)
+        except Student.DoesNotExist:
+            return Response({"error": f"Student with id {student_id} does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        except StudentProfile.DoesNotExist:
+            return Response({"error": f"StudentProfile for student with id {student_id} does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+        cv_file = request.FILES.get('cv', None)
+
+        serializer = self.get_serializer(student_profile, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(cv=cv_file)
+
+        return Response(serializer.data)
+
 class StudentProfileView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
@@ -571,6 +595,7 @@ class WeeklyReportCreate(generics.CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
    
     
+
 
 
 
