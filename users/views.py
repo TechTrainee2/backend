@@ -564,6 +564,7 @@ class TrainingApplicationStatus(generics.RetrieveUpdateAPIView):
     # lookup_url_kwarg ="id"
     permission_classes = [AllowAny]
 
+
 class WeeklyReportList(generics.ListAPIView):
     serializer_class = WeeklyReportSerializer
     permission_classes = [AllowAny]
@@ -571,8 +572,6 @@ class WeeklyReportList(generics.ListAPIView):
     def get_queryset(self):
         student_id = self.kwargs['pk']
         return WeeklyReport.objects.filter(student=student_id)
-
-
 
 
 class WeeklyReportCreate(generics.CreateAPIView):
@@ -596,7 +595,27 @@ class WeeklyReportCreate(generics.CreateAPIView):
    
     
 
+class WeeklyReportCreateSign(generics.CreateAPIView):
+    queryset = WeeklyReport.objects.all()
+    serializer_class = WeeklyReportSerializerCreate
+    permission_classes = [AllowAny]
 
+    def post(self, request, *args, **kwargs):
+        student_id = kwargs.get('pk')  # Get student_id from URL parameters
+
+        try:
+            student = Student.objects.get(pk=student_id)
+        except Student.DoesNotExist:
+            return Response({"error": f"Student with id {student_id} does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+        companySupervisorSignature_file = request.FILES.get('companySupervisorSignature', None)
+        universitySupervisorSignature_file = request.FILES.get('universitySupervisorSignature', None)
+
+        serializer = self.get_serializer(data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(student=student, universitySupervisorSignature=universitySupervisorSignature_file, companySupervisorSignature=companySupervisorSignature_file)
+
+        return Response(serializer.data)
 
 
 

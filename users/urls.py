@@ -102,6 +102,7 @@ urlpatterns = [
     path('user/reports/<int:pk>', views.WeeklyReportList.as_view(), name='weekly_report_list'),
     path('user/report/<int:pk>', views.WeeklyReportCreate.as_view(), name='weekly_report_create'),
     path('user/report/update/<int:pk>', views.WeeklyReportUpdate.as_view(), name='weekly_report_update'),
+    path('weeklyreport/<int:pk>', views.WeeklyReportCreateSign.as_view(), name='weeklyreport_create'),
 
     #notifications
     # path('user/studentNotification/<int:id>', views.StudentNotificationList.as_view(), name='student_notification_list'),
