@@ -350,3 +350,27 @@ class TrainingApplicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrainingApplication
         fields = '__all__'
+
+
+# class StudentSerializerSearchCompany(serializers.ModelSerializer):
+#     company=CompanySerializer2()
+#     class Meta:
+#         model = Student
+#         fields = ['first_name',"last_name",'user','company']
+
+
+
+class StdProfileGETSerializer2(serializers.ModelSerializer):
+    img = serializers.ImageField(required=False) 
+    img_bk = serializers.ImageField(required=False)
+    cv = serializers.FileField(required=False)
+    bio=serializers.CharField(required=False)
+    phone=serializers.CharField(required=False)
+    location=serializers.CharField(required=False)
+    student=StudentSerializer3()
+    # company=CompanySerializer2()
+
+    
+    class Meta:
+        model =StudentProfile
+        fields =['student','img','img_bk','bio','cv','phone','location']

@@ -13,6 +13,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import filters
 from .models import (
     StudentNotification,
     UniversityNotification,
@@ -33,6 +34,7 @@ from .models import (
 from .serializers import (
     CompanyRegisterCompSuperSerializer,
     RegisterUniversitySuperSerializer,
+    StdProfileGETSerializer2,
     StudentNotificationSerializer,
     StudentSerializer, 
     DepartmentSerializer, 
@@ -86,7 +88,7 @@ class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class StudentDetail10(generics.RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
-    serializer_class = StudentSerializer10
+    serializer_class = StudentSerializer3
     permission_classes = [AllowAny]
 
 class DepartmentList(generics.ListAPIView):
@@ -403,6 +405,15 @@ class RetrieveStudentProfileView(generics.RetrieveUpdateDestroyAPIView):
     queryset = StudentProfile.objects.all()
     serializer_class = StdProfileGETSerializer
     permission_classes = [AllowAny]
+
+class StudentProfileFilterView(generics.ListAPIView):
+    queryset = StudentProfile.objects.all()
+    serializer_class = StdProfileGETSerializer2
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['student__first_name', 'student__last_name']
+    permission_classes = [AllowAny] 
+
+
 
 class StdProfileUpdate(generics.UpdateAPIView):
     queryset = StudentProfile.objects.all()
