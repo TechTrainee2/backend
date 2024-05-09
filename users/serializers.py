@@ -234,6 +234,8 @@ class WeeklyReportSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class WeeklyReportSerializerCreate(serializers.ModelSerializer):
+    universitySupervisorSignature = serializers.FileField(required=False)
+    companySupervisorSignature = serializers.FileField(required=False)
     class Meta:
         model = WeeklyReport
         fields = ['report_details', 'week_number', 'date_begin','date_end', 'universitySupervisorSignature', 'companySupervisorSignature', 'table_data']
