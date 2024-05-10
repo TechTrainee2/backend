@@ -17,8 +17,12 @@ urlpatterns = [
     path('stdprof/<int:pk>',views.RetrieveStudentProfileView.as_view()),#s7
 
     path('std/stdprof/<int:pk>',views.StdProfileUpdate.as_view()),#s7
-    #search :)
+    #search std profiles :)
     path('student-profiles', views.StudentProfileFilterView.as_view(), name='student-profile-filter'),
+
+    #search company profiles :)
+    path('company-profiles', views.CompanyProfileFilterView.as_view(), name='company-profile-filter'),
+
     
     path('stdupdate/<int:pk>',views.StudentProfileView.as_view()),#s7
     path('uniprof/<int:pk>',views.RetrieveUniversitySupervisorProfileView.as_view()),#s7
