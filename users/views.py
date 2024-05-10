@@ -62,7 +62,8 @@ from .serializers import (
     UniversitySupervisorSerializer2,
     StudentSerializer3,
     StudentSerializer10,
-    WeeklyReportSerializerCreate
+    WeeklyReportSerializerCreate,
+    CompanyProfileSerializer2
 
     )
 
@@ -413,6 +414,12 @@ class StudentProfileFilterView(generics.ListAPIView):
     search_fields = ['student__first_name', 'student__last_name']
     permission_classes = [AllowAny] 
 
+class CompanyProfileFilterView(generics.ListAPIView):
+    queryset = CompanyProfile.objects.all()
+    serializer_class = CompanyProfileSerializer2
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['company__name']
+    permission_classes = [AllowAny]
 
 
 class StdProfileUpdate(generics.UpdateAPIView):
