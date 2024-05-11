@@ -22,8 +22,10 @@ urlpatterns = [
 
     #search company profiles :)
     path('company-profiles', views.CompanyProfileFilterView.as_view(), name='company-profile-filter'),
-
     
+    # search department
+    path('uni-search', views.UniSuperFilterView.as_view(), name='uni-filter'),
+
     path('stdupdate/<int:pk>',views.StudentProfileView.as_view()),#s7
     path('uniprof/<int:pk>',views.RetrieveUniversitySupervisorProfileView.as_view()),#s7
     path('companyprof/<int:pk>',views.RetrieveCompanyProfileView.as_view()),#s7

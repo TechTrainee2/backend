@@ -40,6 +40,7 @@ from .serializers import (
     DepartmentSerializer, 
     CompanySerializer, 
     CompanySupervisorSerializer,
+    UniSuperGETSerializer2,
     UniversityNotificationSerializer, 
     UniversitySupervisorSerializer, 
     CustomUserSerializer,
@@ -63,7 +64,8 @@ from .serializers import (
     StudentSerializer3,
     StudentSerializer10,
     WeeklyReportSerializerCreate,
-    CompanyProfileSerializer2
+    CompanyProfileSerializer2,
+    
 
     )
 
@@ -421,6 +423,13 @@ class CompanyProfileFilterView(generics.ListAPIView):
     search_fields = ['company__name']
     permission_classes = [AllowAny]
 
+
+class UniSuperFilterView(generics.ListAPIView):
+    queryset = UniversitySupervisorProfile.objects.all()
+    serializer_class = UniSuperGETSerializer2
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['university_supervisor__first_name', 'university_supervisor__last_name']
+    permission_classes = [AllowAny]
 
 class StdProfileUpdate(generics.UpdateAPIView):
     queryset = StudentProfile.objects.all()
