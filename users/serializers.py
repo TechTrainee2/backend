@@ -121,6 +121,12 @@ class RegisterUniversitySuperSerializer(serializers.ModelSerializer):
         model = UniversitySupervisor
         read_only_fields = ["user"]
         fields = '__all__'
+        
+class RegisterCompanySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Company
+        read_only_fields = ["user"]
+        fields = '__all__'
 
 class CompanyRegisterCompSuperSerializer(serializers.ModelSerializer):
    
