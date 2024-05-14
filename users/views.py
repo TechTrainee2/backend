@@ -33,6 +33,7 @@ from .models import (
     )
 from .serializers import (
     CompanyRegisterCompSuperSerializer,
+    RegisterCompanySerializer,
     RegisterUniversitySuperSerializer,
     StdProfileGETSerializer2,
     StudentNotificationSerializer,
@@ -321,6 +322,7 @@ class MyTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
         if response.status_code == 200:
+            # response.set_cookie('access', response.data['access'], domain='localhost', path='/', secure=False, httponly=False)
             response.set_cookie('access', response.data['access'])  # Set JWT token as a cookie
         return response
 
@@ -379,6 +381,30 @@ class RegisterUniSuperView(generics.CreateAPIView):
 
 
         return Response(UniversitySupervisorSerializer(uni_super).data, status=status.HTTP_200_OK)
+
+
+class RegisterCompanyView(generics.CreateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = RegisterCompanySerializer
+    permission_classes = [AllowAny]        #@TODO: Change to IsAuthenticated
+
+    def post(self, request):
+        data = request.data
+        user = CustomUser.objects.create_user(email=data["email"], password=data["password"],account_type=data["account_type"])
+        
+        user.account_type = 'COMPANY'
+        user.save()
+    
+
+        company, created = Company.objects.get_or_create(user=user)
+        company.name = data["name"]
+        company.comp_id = data["comp_id"]
+        
+        company.save()
+        # print(created)
+
+
+        return Response(CompanySerializer(company).data, status=status.HTTP_200_OK)
 
 
 class CompanyCompanySuperRegisterView(generics.CreateAPIView):
