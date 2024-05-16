@@ -16,7 +16,6 @@ class UserAccountManager(BaseUserManager):
     user = self.model(
  
       email=email,
-    #   account_type= self.account_type,
       **other_fields
     )
 
@@ -63,26 +62,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-# class UsersEmail(models.Model):
-#     ACCOUNT_TYPE_CHOICES = (
-#         ('STUDENT', 'Student'),
-#         ('UNIVERSITY_SUPERVISOR', 'University Supervisor'),
-#         ('COMPANY', 'Company'),
-#         ('COMPANY_SUPERVISOR', 'Company Supervisor'),
-#         ('DEPARTMENT', 'Department'),
-#         ('REGISTRATION', 'Registration'),
-#         ("ADMIN","Admin"),
-#     )
-#     account_type = models.CharField(max_length=50, choices=ACCOUNT_TYPE_CHOICES, default="ADMIN")
-  
-#     email = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True, blank=True)
-    
-#     # USERNAME_FIELD = 'email'
-#     # REQUIRED_FIELDS = []
-
-#     # def __str__(self):
-#     #     return self.email
-
 
 
 class Department(models.Model):
@@ -124,12 +103,6 @@ class StudentProfile(models.Model):
     location = models.CharField(max_length=50,null=True, blank=True)
     
 
-
-
-
-
-
-
 class WeeklyReport(models.Model):
     universitySupervisorSignature = models.FileField(upload_to="files\\signatures", null=True, blank=True)
     companySupervisorSignature = models.FileField(upload_to="files\\signatures", null=True, blank=True)
@@ -145,11 +118,6 @@ class WeeklyReport(models.Model):
 
     def __str__(self):
         return self.report_details
-
-
-
-
-
 
 
 class Company(models.Model):
@@ -219,17 +187,3 @@ class TrainingApplication(models.Model):
         if user.is_staff:  # assuming department users are staff
             self.department_status = 'APPROVED'
             self.save()
-
-class StudentNotification(models.Model):
-    recipient = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    content = models.TextField()
-    read = models.BooleanField(default=False)
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-
-class UniversityNotification(models.Model):
-    recipient = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    training_application = models.ForeignKey(TrainingApplication, on_delete=models.CASCADE, null=True, blank=True)
-    content = models.TextField()
-    read = models.BooleanField(default=False)
-    timestamp = models.DateTimeField(auto_now_add=True)

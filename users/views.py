@@ -15,8 +15,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import filters
 from .models import (
-    StudentNotification,
-    UniversityNotification,
     UniversitySupervisorProfile,
     Student, 
     Department, 
@@ -36,13 +34,11 @@ from .serializers import (
     RegisterCompanySerializer,
     RegisterUniversitySuperSerializer,
     StdProfileGETSerializer2,
-    StudentNotificationSerializer,
     StudentSerializer, 
     DepartmentSerializer, 
     CompanySerializer, 
     CompanySupervisorSerializer,
     UniSuperGETSerializer2,
-    UniversityNotificationSerializer, 
     UniversitySupervisorSerializer, 
     CustomUserSerializer,
     UserSerializer,
@@ -59,24 +55,13 @@ from .serializers import (
     CompanySupervisorProfileSerializer2,
     StudentProfileSerializer2,
     UserEmailSerializer,
-    StudentSerializer2,
-    PostSerializer2,
     UniversitySupervisorSerializer2,
     StudentSerializer3,
-    StudentSerializer10,
     WeeklyReportSerializerCreate,
     CompanyProfileSerializer2,
     
 
     )
-
-# class UniversitySupervisorProfileList(generics.ListAPIView):
-#     queryset = UniversitySupervisorProfile.objects.all()
-#     serializer_class = UniversitySupervisorSerializer
-
-# class UniversitySupervisorProfileDetail(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = UniversitySupervisorProfile.objects.all()
-#     serializer_class = UniversitySupervisorSerializer
 
 class StudentList(generics.ListCreateAPIView):
     queryset = Student.objects.all()
@@ -137,15 +122,6 @@ class UniversitySupervisorStudentList(generics.ListAPIView):
         student_profiles = StudentProfile.objects.filter(student__in=student)
         return student_profiles
     
-# class UniversitySupervisorStudentList2(generics.ListAPIView):
-#     serializer_class = StudentSerializer3
-
-#     def get_queryset(self):
-#         supervisor_id = self.kwargs['supervisor_id']
-#         applications = TrainingApplication.objects.filter(university_supervisor_id=supervisor_id)
-#         students = Student.objects.filter(trainingapplication__in=applications).distinct()
-#         return students
-
 class CompanySupervisorStudentList(generics.ListAPIView):
     serializer_class = StudentProfileSerializer2
     permission_classes = [AllowAny]
@@ -153,7 +129,6 @@ class CompanySupervisorStudentList(generics.ListAPIView):
         supervisor_id = self.kwargs['pk']
         supervisor = CompanySupervisor.objects.get(user_id=supervisor_id)
         student = Student.objects.filter(company_supervisor=supervisor)
-        # @TODO: Add company supervisor profile for each compant supervisor and return it as a query
         student_profiles = StudentProfile.objects.filter(student__in=student)
         return student_profiles   
     
@@ -173,7 +148,6 @@ class CompanyStudentList(generics.ListAPIView):
         company_id = self.kwargs['pk']
         companyAcc = Company.objects.get(user_id=company_id)
         student = Student.objects.filter(company=companyAcc)
-        # @TODO: Add company supervisor profile for each compant supervisor and return it as a query
         student_profiles = StudentProfile.objects.filter(student__in=student)
         return student_profiles   
     
@@ -185,7 +159,6 @@ class CompanyCompSuperList(generics.ListAPIView):
         company_id = self.kwargs['pk']
         companyAcc = Company.objects.get(user_id=company_id)
         company_supervisors = CompanySupervisor.objects.filter(company=companyAcc)
-        # @TODO: Add company supervisor profile for each compant supervisor and return it as a query
         company_supervisor_profiles = CompanySupervisorProfile.objects.filter(company_supervisor__in=company_supervisors)
         return company_supervisor_profiles
           
@@ -297,7 +270,6 @@ class CustomUserDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [AllowAny]
 
 
-
 class CustomUserListCreateAPIView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
@@ -322,7 +294,6 @@ class MyTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
         if response.status_code == 200:
-            # response.set_cookie('access', response.data['access'], domain='localhost', path='/', secure=False, httponly=False)
             response.set_cookie('access', response.data['access'])  # Set JWT token as a cookie
         return response
 
@@ -354,7 +325,6 @@ class RegisterStudentView(generics.CreateAPIView):
         student.first_name = data["first_name"]
         student.last_name = data["last_name"]
         student.save()
-        # print(created)
 
 
         return Response(StudentSerializer(student).data, status=status.HTTP_200_OK)
@@ -377,7 +347,6 @@ class RegisterUniSuperView(generics.CreateAPIView):
         uni_super.first_name = data["first_name"]
         uni_super.last_name = data["last_name"]
         uni_super.save()
-        # print(created)
 
 
         return Response(UniversitySupervisorSerializer(uni_super).data, status=status.HTTP_200_OK)
@@ -401,7 +370,6 @@ class RegisterCompanyView(generics.CreateAPIView):
         company.comp_id = data["comp_id"]
         
         company.save()
-        # print(created)
 
 
         return Response(CompanySerializer(company).data, status=status.HTTP_200_OK)
@@ -413,7 +381,7 @@ class CompanyCompanySuperRegisterView(generics.CreateAPIView):
     lookup_url_kwarg = 'id'
     permission_classes = [AllowAny]        #@TODO: Change to IsAuthenticated
 
-    def post(self, request, id=None):  # Add id parameter here
+    def post(self, request, id=None):
         data = request.data
         user = CustomUser.objects.create_user(email=data["email"], password=data["password"],account_type=data["account_type"])
 
@@ -553,12 +521,6 @@ class PostUpdateView(generics.RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'id'
     permission_classes = [AllowAny]
 
-# class PostDeleteView(generics.DestroyAPIView):
-#     queryset = Post.objects.all()
-#     serializer_class = PostSerializer
-#     lookup_url_kwarg = 'id'
-#     permission_classes = [AllowAny]
-
 class TrainingApplicationCreate(generics.CreateAPIView):
     queryset = TrainingApplication.objects.all()
     serializer_class = TrainingApplicationSerializer
@@ -614,7 +576,6 @@ class TrainingApplicationUniSuperList(generics.ListAPIView):
 class TrainingApplicationStatus(generics.RetrieveUpdateAPIView):
     queryset = TrainingApplication.objects.all()
     serializer_class = TrainingApplicationSerializer
-    # lookup_url_kwarg ="id"
     permission_classes = [AllowAny]
 
 
@@ -676,23 +637,3 @@ class WeeklyReportUpdate(generics.RetrieveUpdateDestroyAPIView):
     queryset = WeeklyReport.objects.all()
     serializer_class = WeeklyReportSerializer
     permission_classes = [AllowAny]
-
-
-
-class StudentNotificationList(generics.ListAPIView):
-    serializer_class = StudentNotificationSerializer
-    permission_classes = [AllowAny]
-
-    def get_queryset(self):
-        student_id = self.kwargs['id']
-        student = get_object_or_404(CustomUser, id=student_id)
-        return StudentNotification.objects.filter(recipient=student)
-
-class UniversityNotificationList(generics.ListAPIView):
-    serializer_class = UniversityNotificationSerializer
-    permission_classes = [AllowAny]
-
-    def get_queryset(self):
-        university_supervisor_id = self.kwargs['id']
-        university_supervisor = get_object_or_404(CustomUser, id=university_supervisor_id)
-        return UniversityNotification.objects.filter(recipient=university_supervisor)
