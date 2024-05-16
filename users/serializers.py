@@ -3,8 +3,8 @@ from django.core import exceptions
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import (CustomUser, StudentNotification,
-                    StudentProfile, UniversityNotification,
+from .models import (CustomUser,
+                    StudentProfile,
                     UniversitySupervisorProfile,
                     CompanyProfile,
                     CompanySupervisorProfile,
@@ -18,28 +18,13 @@ from .models import (CustomUser, StudentNotification,
                     WeeklyReport,
                      )
 
-# CustomUser = get_user_model()
-
-
-# class AssignUniversitySupervisorSerializer(serializers.ModelSerializer):
-#     email = serializers.CharField(source='user.email')
-#     image_url = serializers.SerializerMethodField()
-#     class Meta:
-#         model = UniversitySupervisor
-#         fields = ['email', 'img']
-            
-#     def get_image_url(self, obj):
-#         return 
-
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
  
-        # Add custom claims
         token['email'] = user.email
         token['password'] = user.password
-        # ...
  
         return token
     
@@ -89,26 +74,16 @@ class STDprofSupervisorSerializer(serializers.ModelSerializer):
         fields = ['first_name',"last_name"]
 
 class StudentSerializer(serializers.ModelSerializer):
-    # department = DepartmentSerializer()
-    # company = CompanySerializer()
-    # company_supervisor = CompanySupervisorSerializer()
-    # university_supervisor = STDprofSupervisorSerializer()
 
     class Meta:
         model = Student
         fields = ["first_name","last_name"]
         read_only_fields = ['user','university_supervisor']
 
-class StudentSerializer10(serializers.ModelSerializer):
-    # department = DepartmentSerializer()
-    # company = CompanySerializer()
-    # company_supervisor = CompanySupervisorSerializer()
-    # university_supervisor = STDprofSupervisorSerializer()
-
-    class Meta:
-        model = Student
-        fields = ["first_name","last_name","university_supervisor","user"]
-        # read_only_fields = ['user','university_supervisor']
+# class StudentSerializer10(serializers.ModelSerializer):
+#     class Meta:
+#         model = Student
+#         fields = ["first_name","last_name","university_supervisor","user"]
 
 class RegisterStudentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -258,33 +233,16 @@ class WeeklyReportSerializerCreate(serializers.ModelSerializer):
         read_only_fields = ['student']
 
 
-
-
-class StudentNotificationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = StudentNotification
-        fields = '__all__'
-
-class UniversityNotificationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UniversityNotification
-        fields = '__all__'
-
 class CompanySupervisorSerializer2(serializers.ModelSerializer):
     class Meta:
         model = CompanySupervisor
         fields = ['first_name',"last_name",'user']
-        # read_only_fields = ['user']
-# @TODO: create new serializer
-# @TODO: This serializer should get the profile for that company supervisor
 
 class CompanySupervisorProfileSerializer2(serializers.ModelSerializer):
-    # profile = serializers.SerializerMethodField()
     img = serializers.ImageField(required=False) 
     img_bk = serializers.ImageField(required=False)
     phone=serializers.CharField(required=False)
     location=serializers.CharField(required=False)
-    # role=serializers.CharField(required=False)
     company_supervisor=CompanySupervisorSerializer2()
     class Meta:
         model =CompanySupervisorProfile
@@ -294,7 +252,6 @@ class CompanySerializer2(serializers.ModelSerializer):
     class Meta:
         model = Company
         fields = ['name','comp_id','user']
-        # read_only_fields = ['user']
 
 
 class StudentSerializer2(serializers.ModelSerializer):
@@ -313,31 +270,11 @@ class StudentSerializer3(serializers.ModelSerializer):
         fields = ['first_name',"last_name",'user','company_supervisor','company','university_supervisor']
 
 
-
-# Stretch goal
-
-# class StudentSerializer4(serializers.ModelSerializer):
-#     profile = serializers.SerializerMethodField()
-#     class Meta:
-#         model = Student
-#         fields = ['user','profile']
-#     def get_profile(self, obj):
-#         current=StudentProfile.objects.filter(student=obj).first()
-#         return StudentProfileSerializer2(current).data
-    
-
-
-        # read_only_fields = ['user']
-# @TODO: create new serializer
-# @TODO: This serializer should get the profile for that company supervisor
 class StudentProfileSerializer2(serializers.ModelSerializer):
-    # profile = serializers.SerializerMethodField()
     img = serializers.ImageField(required=False) 
     img_bk = serializers.ImageField(required=False)
     phone=serializers.CharField(required=False)
     location=serializers.CharField(required=False)
-    # department= serializers.CharField(required=False)
-    # role=serializers.CharField(required=False)
 
     student=StudentSerializer2()
     class Meta:
@@ -345,37 +282,27 @@ class StudentProfileSerializer2(serializers.ModelSerializer):
         fields =['student','img','img_bk','phone','location']
 
 class CompanyProfileSerializer2(serializers.ModelSerializer):
-    # profile = serializers.SerializerMethodField()
     img = serializers.ImageField(required=False) 
     img_bk = serializers.ImageField(required=False)
     bio=serializers.CharField(required=False)
     phone=serializers.CharField(required=False)
     location=serializers.CharField(required=False)
-    # role=serializers.CharField(required=False)
     company=CompanySerializer2()
     class Meta:
         model =CompanyProfile
         fields =['company','img','img_bk','phone','location','bio']
 
 
-class PostSerializer2(serializers.ModelSerializer):
-    company = CompanySerializer2()
-    class Meta:
-        model = Post
-        fields = ['company','date','post_details','title','training_mode']
+# class PostSerializer2(serializers.ModelSerializer):
+#     company = CompanySerializer2()
+#     class Meta:
+#         model = Post
+#         fields = ['company','date','post_details','title','training_mode']
 
 class TrainingApplicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrainingApplication
         fields = '__all__'
-
-
-# class StudentSerializerSearchCompany(serializers.ModelSerializer):
-#     company=CompanySerializer2()
-#     class Meta:
-#         model = Student
-#         fields = ['first_name',"last_name",'user','company']
-
 
 
 class StdProfileGETSerializer2(serializers.ModelSerializer):
@@ -386,7 +313,6 @@ class StdProfileGETSerializer2(serializers.ModelSerializer):
     phone=serializers.CharField(required=False)
     location=serializers.CharField(required=False)
     student=StudentSerializer3()
-    # company=CompanySerializer2()
 
     
     class Meta:

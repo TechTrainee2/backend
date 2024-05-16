@@ -53,9 +53,7 @@ admin.site.register(UniversitySupervisor, UniversitySupervisorAdmin)
 admin.site.register(UniversitySupervisorProfile, UniversitySupervisorProfileAdmin)
 admin.site.register(Student, StudentAdmin)
 admin.site.register(StudentProfile, StudentProfileAdmin)
-
 admin.site.register(WeeklyReport, WeeklyReportAdmin)
-
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(CompanyProfile, CompanyProfileAdmin)
 admin.site.register(Post, PostAdmin)
